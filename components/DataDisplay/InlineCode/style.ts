@@ -4,7 +4,7 @@ import { theme } from '@utils';
 
 const StyledInlineCode = styled.code`
   color: ${theme.cvar('colorInlineCode')};
-  font-family: 'JetBrains Mono', sans-serif;
+  font-family: Inter, sans-serif;
   font-weight: normal;
 `;
 

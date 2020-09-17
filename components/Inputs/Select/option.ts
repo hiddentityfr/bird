@@ -33,7 +33,7 @@ export const StyledSelectOption = styled.div<StyledSelectOptionProps>`
   // Text
   color: ${theme.cvar('colorSelectOptionText')};
   font-size: ${theme.typography.small.size};
-  font-family: Montserrat, sans-serif;
+  font-family: Inter, sans-serif;
 
   // Layout
   padding: ${theme.cvar('layoutSpace2x')};

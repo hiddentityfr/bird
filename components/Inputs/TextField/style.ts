@@ -103,5 +103,5 @@ export const TextFieldInput = styled.input<
   color: ${({ variant, focused }): string =>
     focused ? color.hover[variant] : color.base.text[variant]};
   font-size: ${theme.typography.small.size};
-  font-family: Montserrat, sans-serif;
+  font-family: Inter, sans-serif;
 `;
