@@ -1,15 +1,13 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import { Container } from '@components/Layouts';
-import { Text } from '@components/DataDisplay';
+import Administration from './administration';
 
 const Home = (): JSX.Element => {
   return (
-    <Container align="center">
-      <Container>
-        <Text variant="h1">Welcome on Next.js template!</Text>
-      </Container>
-    </Container>
+    <Router>
+      <Route exact path="/" component={Administration} />
+    </Router>
   );
 };
 
