@@ -1,40 +1,64 @@
 import React from 'react';
+import { User, Settings } from 'react-feather';
+import Container from '../Layouts/Container';
+import Text from '../DataDisplay/Text';
+import Link from '../DataDisplay/Link';
 
 export default function LeftSideBar() {
   return (
-    <div className="left-sidebar">
-      <div className="title-left-sidebar">
-        <img
-          src="/images/logo-color.png"
-          alt="Hiddentity logo"
-          className="img-title-left-sidebar"
-        />
-        <p className="text-title-sidebar">Hiddentity</p>
-      </div>
-
-      <div className="navigation-left-sidebar">
-        <div className="div-nav-left-sidebar">
-          <p className="nav-left-sidebar">Accueil</p>
-        </div>
-        <div className="div-nav-left-sidebar">
-          <p className="nav-left-sidebar">Candidats</p>
-        </div>
-        <div className="div-nav-left-sidebar">
-          <p className="nav-left-sidebar">Offres</p>
-        </div>
-        <div className="div-nav-left-sidebar">
-          <p className="nav-left-sidebar-active">Administration</p>
-        </div>
-      </div>
-
-      <div className="bot-navigation-left-sidebar">
-        <div className="account-navigation-left-sidebar">
-          <p className="text-bot-navigation-left-sidebar">Mon compte</p>
-        </div>
-        <div className="parameters-navigation-left-sidebar">
-          <p className="text-bot-navigation-left-sidebar">Paramètres</p>
-        </div>
-      </div>
+    <div className="grey-div-full-space">
+      <Container justify="space-around" align="center">
+        <Container row justify="center" align="center" gap={8}>
+          <img
+            src="/images/logo-color.png"
+            alt="hiddentity logo"
+            className="hiddentity-logo"
+          />
+          <Text variant="h4" color="#000000">
+            Hiddentity
+          </Text>
+        </Container>
+        <Container justify="space-around" align="flex-start" gap={8}>
+          <Link href="/">
+            <Text variant="h5" color="#bdbdbd">
+              Accueil
+            </Text>
+          </Link>
+          <Link href="/">
+            <Text variant="h5" color="#bdbdbd">
+              Candidats
+            </Text>
+          </Link>
+          <Link href="/">
+            <Text variant="h5" color="#bdbdbd">
+              Offres
+            </Text>
+          </Link>
+          <Link href="/">
+            <Text variant="h5" color="#000000">
+              Administration
+            </Text>
+          </Link>
+        </Container>
+        <Container justify="space-around" align="flex-start" gap={8}>
+          <Link href="/">
+            <Container row justify="space-around" align="center">
+              <User size={24} className="sidebar-icon" />
+              <Text variant="h5" color="#bdbdbd">
+                Mon compte
+              </Text>
+            </Container>
+          </Link>
+          <Link href="/">
+            <Container row justify="space-around" align="center">
+              <Settings size={24} className="sidebar-icon" />
+              <Text variant="h5" color="#bdbdbd">
+                Paramètres
+              </Text>
+            </Container>
+          </Link>
+        </Container>
+      </Container>
     </div>
   );
 }
