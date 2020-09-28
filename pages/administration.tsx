@@ -12,7 +12,7 @@ export default function Administration() {
         <LeftSideBar />
         <Container>
           <Container justify="flex-start" align="stretch">
-            <Container row justify="space-between" align="flex-start">
+            <Container row justify="space-between" align="center">
               <Text variant="h4" color="#000000">
                 Administration
               </Text>
@@ -22,6 +22,7 @@ export default function Administration() {
                 placeholder="Rechercher une équipe..."
               />
             </Container>
+
             <Container justify="flex-start" align="stretch">
               <Container row justify="space-between" align="flex-start">
                 <Text variant="h5" color="#000000">
@@ -37,6 +38,7 @@ export default function Administration() {
                   Entreprise
                 </Text>
               </Container>
+
               <Container row justify="space-around" align="flex-start">
                 <Container justify="flex-start">
                   <p>Equipes actives</p>
@@ -74,7 +76,12 @@ export default function Administration() {
                     </Container>
                   </Container>
                 </Container>
-                <Container>Rh</Container>
+                <Container>
+                  <Container row justify="flex-start" align="center">
+                    <Text variant="h3">R</Text>
+                    <p>Ressources Humaines</p>
+                  </Container>
+                </Container>
               </Container>
             </Container>
           </Container>
