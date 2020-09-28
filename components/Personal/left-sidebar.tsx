@@ -8,7 +8,7 @@ export default function LeftSideBar() {
   return (
     <div className="grey-div-full-space">
       <Container justify="stretch" align="center">
-        <Container row justify="center" align="center" gap={8}>
+        <Container row justify="center" align="center" gap={7}>
           <img
             src="/images/logo-color.png"
             alt="hiddentity logo"
