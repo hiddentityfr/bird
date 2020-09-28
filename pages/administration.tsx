@@ -12,7 +12,7 @@ export default function Administration() {
         <LeftSideBar />
         <Container>
           <Container justify="flex-start" align="stretch">
-            <Container row justify="space-between">
+            <Container row justify="space-between" align="flex-start">
               <Text variant="h4" color="#000000">
                 Administration
               </Text>
@@ -38,7 +38,14 @@ export default function Administration() {
                 </Text>
               </Container>
               <Container row justify="space-around" align="stretch">
-                <Container>Teams</Container>
+                <Container justify="flex-start">
+                  <Text variant="h6" color="#828282">
+                    Equipes actives
+                  </Text>
+                  <Text variant="h6" color="#828282">
+                    Equipes inactives
+                  </Text>
+                </Container>
                 <Container>Rh</Container>
               </Container>
             </Container>
