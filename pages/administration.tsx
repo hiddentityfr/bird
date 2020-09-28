@@ -37,6 +37,10 @@ export default function Administration() {
                   Entreprise
                 </Text>
               </Container>
+              <Container row justify="space-around" align="stretch">
+                <Container>Teams</Container>
+                <Container>Rh</Container>
+              </Container>
             </Container>
           </Container>
         </Container>
