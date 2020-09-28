@@ -37,11 +37,9 @@ export default function Administration() {
                   Entreprise
                 </Text>
               </Container>
-              <Container row justify="space-around" align="stretch">
+              <Container row justify="space-around" align="flex-start">
                 <Container justify="flex-start">
-                  <Text variant="h6" color="#828282">
-                    Equipes actives
-                  </Text>
+                  <p>Equipes actives</p>
                   <Container justify="flex-start" align="flex-start">
                     <Container row justify="center" align="center">
                       <Text variant="h3">R</Text>
@@ -65,9 +63,16 @@ export default function Administration() {
                       </Container>
                     </Container>
                   </Container>
-                  <Text variant="h6" color="#828282">
-                    Equipes inactives
-                  </Text>
+                  <Container justify="flex-start">
+                    <p>Equipes inactives</p>
+                    <Container row justify="center" align="center">
+                      <Text variant="h3">R</Text>
+                      <Container justify="center" align="flex-start">
+                        <p>Ressources Humaines</p>
+                        <p>2 membres</p>
+                      </Container>
+                    </Container>
+                  </Container>
                 </Container>
                 <Container>Rh</Container>
               </Container>
