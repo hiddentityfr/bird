@@ -1,5 +1,6 @@
 import Text from './Text';
 import Link from './Link';
 import InlineCode from './InlineCode';
+import Avatar from './Avatar';
 
-export { Text, Link, InlineCode };
+export { Text, Link, InlineCode, Avatar };
