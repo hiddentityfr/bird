@@ -1,9 +1,11 @@
 import React from 'react';
+
+import { PauseCircle } from 'react-feather';
+
 import Container from '../components/Layouts/Container';
 import Text from '../components/DataDisplay/Text';
 import TextField from '../components/Inputs/TextField';
 import LeftSideBar from '../components/Personal/left-sidebar';
-//  import { Search } from 'react-feather';
 
 export default function Administration() {
   return (
@@ -41,37 +43,49 @@ export default function Administration() {
 
           <Container row justify="flex-start" align="flex-start">
             <Container justify="flex-start" align="flex-start">
-              <p className="grey-paragraphe">Equipes actives</p>
+              <Text variant="p" color="#bdbdbd">
+                Equipes actives
+              </Text>
               <Container justify="flex-start" align="flex-start">
                 <Container row justify="flex-start" align="center">
                   <Text variant="h3">R</Text>
                   <Container justify="flex-start" align="flex-start">
-                    <p>Ressources Humaines</p>
-                    <p>2 membres</p>
+                    <Text variant="p">Ressources Humaines</Text>
+                    <Text variant="small" color="#bdbdbd">
+                      2 membres
+                    </Text>
                   </Container>
                 </Container>
                 <Container row justify="flex-start" align="center">
                   <Text variant="h3">R</Text>
-                  <Container justify="center" align="flex-start">
-                    <p>Ressources Humaines</p>
-                    <p>2 membres</p>
+                  <Container justify="flex-start" align="flex-start">
+                    <Text variant="p">Ressources Humaines</Text>
+                    <Text variant="small" color="#bdbdbd">
+                      2 membres
+                    </Text>
                   </Container>
                 </Container>
                 <Container row justify="flex-start" align="center">
                   <Text variant="h3">R</Text>
-                  <Container justify="center" align="flex-start">
-                    <p>Ressources Humaines</p>
-                    <p>2 membres</p>
+                  <Container justify="flex-start" align="flex-start">
+                    <Text variant="p">Ressources Humaines</Text>
+                    <Text variant="small" color="#bdbdbd">
+                      2 membres
+                    </Text>
                   </Container>
                 </Container>
               </Container>
-              <p className="grey-paragraphe">Equipes inactives</p>
+              <Text variant="p" color="#bdbdbd">
+                Equipes inactives
+              </Text>
               <Container justify="flex-start">
                 <Container row justify="center" align="center">
-                  <Text variant="h3">R</Text>
-                  <Container justify="center" align="flex-start">
-                    <p>Ressources Humaines</p>
-                    <p>2 membres</p>
+                  <PauseCircle size={24} />
+                  <Container justify="flex-start" align="flex-start">
+                    <Text variant="p">Ressources Humaines</Text>
+                    <Text variant="small" color="#bdbdbd">
+                      2 membres
+                    </Text>
                   </Container>
                 </Container>
               </Container>

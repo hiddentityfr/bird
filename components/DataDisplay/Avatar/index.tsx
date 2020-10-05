@@ -18,7 +18,7 @@ const Avatar = ({
   src,
   username = 'Avatar',
   size = 50,
-  rounded = true,
+  rounded = false,
   align = 'center',
   backgroundColor = src ? 'transparent' : theme.cvar('colorForeground'),
   label,
