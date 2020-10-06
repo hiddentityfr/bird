@@ -7,7 +7,7 @@ import Link from '../DataDisplay/Link';
 export default function LeftSideBar() {
   return (
     <div className="grey-div-full-space">
-      <Container justify="stretch" align="center">
+      <Container justify="stretch" align="center" flex={1}>
         <Container row justify="center" align="center" gap={7}>
           <img
             src="/images/logo-color.png"
