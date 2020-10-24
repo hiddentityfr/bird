@@ -47,7 +47,6 @@ const Avatar = ({
               weight="normal"
               align="center"
               color={theme.cvar('colorBackground')}
-              size={`${Math.round(size * 0.5)}px`}
             >
               {username[0].toUpperCase()}
             </Text>
