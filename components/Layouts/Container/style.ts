@@ -12,6 +12,7 @@ export interface StyledContainerProps {
   align: FlexContent;
   bg: string;
   gap: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  backgroundColor: string;
 }
 
 export const StyledContainer = styled.div<StyledContainerProps>`
@@ -25,7 +26,11 @@ export const StyledContainer = styled.div<StyledContainerProps>`
   justify-content: ${({ justify }): string => justify};
   align-items: ${({ align }): string => align};
   margin: calc(${theme.cvar('layoutSpace')} * ${({ gap }): number => gap});
+<<<<<<< Updated upstream
 
   // Style
   background-color: ${({ bg }) => bg};
+=======
+  background-color: ${({ backgroundColor }): string => backgroundColor};
+>>>>>>> Stashed changes
 `;

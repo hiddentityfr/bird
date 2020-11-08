@@ -10,9 +10,9 @@ import Avatar from '../components/DataDisplay/Avatar';
 
 export default function Administration() {
   return (
-    <Container row justify="flex-start" align="flex-start" gap={0}>
+    <Container row justify="flex-start" align="flex-start" flex={1} gap={0}>
       <LeftSideBar />
-      <Container>
+      <Container flex={3}>
         <Container justify="flex-start" align="stretch">
           <Container row justify="space-between" align="center">
             <Text variant="h4" color="#000000">
@@ -184,7 +184,8 @@ export default function Administration() {
             </Container>
           </Container>
         </Container>
-      </Container>
+  </Container>
+
     </Container>
   );
 }
