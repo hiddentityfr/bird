@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 
 import { StyledContainer, StyledContainerProps } from './style';
 
 interface ContainerProps extends Partial<StyledContainerProps> {
   children: ReactNode;
+  style?: CSSProperties;
 }
 
 const Container = ({
@@ -15,10 +16,12 @@ const Container = ({
   justify = 'flex-start',
   align = row ? 'center' : 'stretch',
   bg = 'transparent',
+  style,
   gap = 3,
 }: ContainerProps): JSX.Element => {
   return (
     <StyledContainer
+      style={style}
       bg={bg}
       flex={flex}
       row={row}

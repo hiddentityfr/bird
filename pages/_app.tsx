@@ -4,6 +4,8 @@ import { ThemeProvider } from 'styled-components';
 
 import { useMounted } from '@hooks';
 
+import { Container } from '@components/Layouts';
+
 import 'styles/inter.css';
 import 'styles/main.css';
 
@@ -16,8 +18,10 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
 
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <Component {...pageProps} />
+      <Container gap={0} style={{ minHeight: '100vh' }}>
+        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+        <Component {...pageProps} />
+      </Container>
     </ThemeProvider>
   );
 };
