@@ -16,6 +16,7 @@ const Text = ({
   weight = theme.typography[variant].weight as FontWeight,
   italic = false,
   bold = false,
+  margin = false,
   align = 'left',
 }: TextProps): JSX.Element => {
   return (
@@ -27,6 +28,7 @@ const Text = ({
       bold={bold}
       align={align}
       as={variant}
+      margin={margin}
     >
       {bold ? <b>{children}</b> : children}
     </StyledText>

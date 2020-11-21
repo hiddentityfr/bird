@@ -26,7 +26,7 @@ export interface StyledTextFieldProps {
   focused: boolean;
   variant: 'default' | 'error' | 'disabled';
   thickness: 'small' | 'medium' | 'large';
-  size: 'short' | 'medium' | 'long';
+  size: 'short' | 'medium' | 'long' | 'large';
 }
 
 export const StyledTextField = styled.div<StyledTextFieldProps>`
@@ -57,6 +57,8 @@ export const StyledTextField = styled.div<StyledTextFieldProps>`
   }
   min-width: ${({ size }): string => {
     switch (size) {
+      case 'large':
+        return '400px';
       case 'long':
         return '180px';
       case 'short':

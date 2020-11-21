@@ -26,11 +26,7 @@ export const StyledContainer = styled.div<StyledContainerProps>`
   justify-content: ${({ justify }): string => justify};
   align-items: ${({ align }): string => align};
   margin: calc(${theme.cvar('layoutSpace')} * ${({ gap }): number => gap});
-<<<<<<< Updated upstream
 
   // Style
   background-color: ${({ bg }) => bg};
-=======
-  background-color: ${({ backgroundColor }): string => backgroundColor};
->>>>>>> Stashed changes
 `;

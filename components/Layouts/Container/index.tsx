@@ -18,8 +18,6 @@ const Container = ({
   bg = 'transparent',
   style,
   gap = 3,
-  backgroundColor = "#"
-
 }: ContainerProps): JSX.Element => {
   return (
     <StyledContainer
@@ -32,7 +30,6 @@ const Container = ({
       justify={justify}
       align={align}
       gap={gap}
-      backgroundColor={backgroundColor}
     >
       {children}
     </StyledContainer>
