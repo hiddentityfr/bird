@@ -29,6 +29,7 @@
       "@hooks": ["hooks"],
       "@types": ["types"],
       "@utils": ["utils"],
+      "@services": ["services"],
       "@components/*": ["components/*"],
       "@contexts/*": ["contexts/*"]
     }
