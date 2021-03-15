@@ -6,14 +6,46 @@ export const queries = {
       company(id: $id) {
         id
         siret
+        name
+        members {
+          totalCount
+        }
+        teams {
+          totalCount
+        }
+        offers {
+          totalCount
+        }
       }
     }
   `,
   companies: gql`
-    query companies {
-      companies {
-        id
-        siret
+    query companies($after: Cursor, $first: Int, $before: Cursor, $last: Int) {
+      companies(after: $after, before: $before, first: $first, last: $last) {
+        totalCount
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+        edges {
+          cursor
+          node {
+            id
+            name
+            siret
+            members {
+              totalCount
+            }
+            teams {
+              totalCount
+            }
+            offers {
+              totalCount
+            }
+          }
+        }
       }
     }
   `,

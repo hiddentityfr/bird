@@ -5,6 +5,24 @@ export const queries = {
     query team($id: ID!) {
       team(id: $id) {
         id
+        users {
+          totalCount
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          edges {
+            cursor
+            node {
+              id
+              email
+              firstname
+              lastname
+            }
+          }
+        }
         name
         createdAt
         updatedAt
@@ -12,12 +30,25 @@ export const queries = {
     }
   `,
   teams: gql`
-    query teams {
-      teams {
-        id
-        name
-        createdAt
-        updatedAt
+    query teams($after: Cursor, $first: Int, $before: Cursor, $last: Int) {
+      teams(after: $after, before: $before, first: $first, last: $last) {
+        totalCount
+        pageInfo {
+          startCursor
+          endCursor
+          hasPreviousPage
+          hasNextPage
+        }
+        edges {
+          cursor
+          node {
+            id
+            name
+            users {
+              totalCount
+            }
+          }
+        }
       }
     }
   `,
