@@ -1,7 +1,9 @@
 import React from 'react';
 import { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
+import { ApolloProvider } from '@apollo/client';
 
+import { api } from '@services';
 import { useMounted } from '@hooks';
 
 import { Container } from '@components/Layouts';
@@ -27,8 +29,12 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
 };
 
 const App = (props: AppProps): JSX.Element => {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <AppContent {...props} />;
+  return (
+    <ApolloProvider client={api.client}>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <AppContent {...props} />
+    </ApolloProvider>
+  );
 };
 
 export default App;
