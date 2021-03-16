@@ -8,6 +8,7 @@ export interface StyledContainerProps {
   row: boolean;
   reverse: boolean;
   noWrap: boolean;
+  rounded: boolean;
   justify: FlexContent;
   align: FlexContent;
   bg: string;
@@ -29,4 +30,5 @@ export const StyledContainer = styled.div<StyledContainerProps>`
 
   // Style
   background-color: ${({ bg }) => bg};
+  border-radius: ${({ rounded }) => (rounded) ? '5px' : '0px'};
 `;

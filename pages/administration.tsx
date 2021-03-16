@@ -150,11 +150,11 @@ const Administration = () => {
                 <Container justify="space-around" gap={0}>
                   <Container row gap={0}>
                     <Container row justify="flex-start" gap={0} flex={9}>
-                      <Container row justify="space-between" gap={0} flex={1}>
+                      <Container row justify="space-between" gap={0} flex={2}>
                         <Text variant="h5">Permissions par défaut</Text>
                         <HelpCircle size={16} color="#828282" />
                       </Container>
-                      <Container row justify="flex-end" gap={0} flex={1}>
+                      <Container row justify="flex-end" gap={0} flex={3}>
                         <Text variant="small" color="#828282">
                           +AJOUTER
                         </Text>
@@ -182,7 +182,7 @@ const Administration = () => {
                         <Container row justify="flex-end" gap={0}>
                           <XCircle size={18} color="#828282" />
                           <Text variant="small" color="#f2f2f5">
-                            {' '}
+                            {'void'}
                           </Text>
                         </Container>
                       </Container>

@@ -45,6 +45,8 @@ export interface StyledButtonProps {
   variant: ButtonVariant | 'disabled';
   size: 'short' | 'medium' | 'long';
   thickness: 'small' | 'medium' | 'large';
+  backgroundColor: string;
+  borderColor: string;
 }
 
 export const StyledButton = styled.button<StyledButtonProps>`
@@ -99,4 +101,6 @@ export const StyledButton = styled.button<StyledButtonProps>`
     border: 1px solid ${({ variant }): string => color.hover.border[variant]};
     background: ${({ variant }): string => color.hover.background[variant]};
   }
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  border-color: ${({ borderColor }) => borderColor};
 `;

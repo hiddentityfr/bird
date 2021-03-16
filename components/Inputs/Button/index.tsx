@@ -21,6 +21,8 @@ const Button = ({
   disabled = false,
   gap = 3,
   onClick = (): void => {},
+  backgroundColor = "#000",
+  borderColor = "#000"
 }: ButtonProps): JSX.Element => {
   return (
     <Container gap={gap} flex={size ? 0 : 1}>
@@ -29,6 +31,8 @@ const Button = ({
         size={size ?? 'medium'}
         thickness={thickness}
         onClick={(!disabled && onClick) || ((): void => {})}
+        backgroundColor={backgroundColor}
+        borderColor={borderColor}
       >
         <Text variant="small" weight={500}>
           {children}

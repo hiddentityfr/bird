@@ -16,6 +16,7 @@ const Container = ({
   justify = 'flex-start',
   align = row ? 'center' : 'stretch',
   bg = 'transparent',
+  rounded = false,
   style,
   gap = 3,
 }: ContainerProps): JSX.Element => {
@@ -23,6 +24,7 @@ const Container = ({
     <StyledContainer
       style={style}
       bg={bg}
+      rounded={rounded}
       flex={flex}
       row={row}
       reverse={reverse}
