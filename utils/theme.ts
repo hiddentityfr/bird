@@ -58,7 +58,6 @@ const CSSVariables = {
   layoutSpace32x: '--layout-space-32x',
   layoutSpaceGap: '--layout-space-gap',
   layoutSpaceGapHalf: '--layout-space-gap-half',
-
   colorButtonGreen: '--color-teal',
 };
 
