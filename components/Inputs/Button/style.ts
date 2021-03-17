@@ -8,16 +8,19 @@ const color = {
       primary: theme.cvar('colorButtonTextPrimary'),
       secondary: theme.cvar('colorButtonTextSecondary'),
       disabled: theme.cvar('colorButtonTextDisabled'),
+      teal: theme.cvar('colorButtonTextPrimary'),
     },
     background: {
       primary: theme.cvar('colorButtonBgPrimary'),
       secondary: theme.cvar('colorButtonBgSecondary'),
       disabled: theme.cvar('colorButtonBgDisabled'),
+      teal: theme.cvar('colorButtonGreen'),
     },
     border: {
       primary: theme.cvar('colorButtonBorderPrimary'),
       secondary: theme.cvar('colorButtonBorderSecondary'),
       disabled: theme.cvar('colorButtonBorderDisabled'),
+      teal: theme.cvar('colorButtonGreen'),
     },
   },
   hover: {
@@ -30,16 +33,18 @@ const color = {
       primary: theme.cvar('colorButtonBgSecondary'),
       secondary: theme.cvar('colorButtonBgSecondary'),
       disabled: theme.cvar('colorButtonBgDisabled'),
+      teal: theme.cvar('colorButtonGreen'),
     },
     border: {
       primary: theme.cvar('colorButtonBorderPrimary'),
       secondary: theme.cvar('colorButtonBorderPrimary'),
       disabled: theme.cvar('colorButtonBorderDisabled'),
+      teal: theme.cvar('colorButtonGreen'),
     },
   },
 };
 
-export type ButtonVariant = 'primary' | 'secondary';
+export type ButtonVariant = 'primary' | 'secondary' | 'teal';
 
 export interface StyledButtonProps {
   variant: ButtonVariant | 'disabled';
