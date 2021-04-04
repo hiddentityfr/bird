@@ -16,6 +16,7 @@ const Text = ({
   weight = theme.typography[variant].weight as FontWeight,
   italic = false,
   bold = false,
+  margin = 0,
   align = 'left',
   size = theme.typography[variant].size,
 }: TextProps): JSX.Element => {
@@ -26,6 +27,7 @@ const Text = ({
       weight={weight}
       italic={italic}
       bold={bold}
+      margin={margin}
       align={align}
       as={variant}
     >
