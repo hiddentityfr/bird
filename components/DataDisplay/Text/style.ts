@@ -18,6 +18,7 @@ export interface StyledTextProps {
   weight: FontWeight;
   italic: boolean;
   bold: boolean;
+  margin: number;
   align: 'left' | 'center' | 'right';
 }
 
@@ -29,6 +30,7 @@ export const StyledText = styled.text<StyledTextProps>`
   font-weight: ${({ weight }): FontWeight => weight};
   font-style: ${({ italic }): string => (italic ? 'italic' : 'normal')};
   font-family: Inter, sans-serif;
+  margin: ${({ margin }): number => margin}px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
