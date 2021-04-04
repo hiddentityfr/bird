@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { User, Settings } from 'react-feather';
 import Container from '@components/Layouts/Container';
 import Text from '@components/DataDisplay/Text';
 import Link from '@components/DataDisplay/Link';
 
-const SideBar = () => {
+type SideBarProps = {
+  check: string;
+  child: ReactNode;
+}
+
+const SideBar = (props: SideBarProps) => {
+  const Global = (props: SideBarProps) => {
+    if (props.props.check === props.children)
+      return (
+        <Container
+            row
+            justify="flex-start"
+            align="flex-start"
+            gap={0}
+            flex={1}
+          >
+          <Text variant="h4" color="#000" margin={16}>
+            •
+          </Text>
+          <Text variant="h4" color="#000" margin={16}>
+            {props.children}
+          </Text>
+        </Container>
+      );
+    return (
+      <Text variant="h4" color="#bdbdbd" margin={16}>
+        {props.children}
+      </Text>
+    );
+  }
+
   return (
     <Container
       align="center"
@@ -30,24 +60,24 @@ const SideBar = () => {
       </Container>
       <Container justify="center" align="flex-start" gap={0} flex={2}>
         <Link href="/">
-          <Text variant="h4" color="#bdbdbd" margin={16}>
+          <Global props={props}>
             Accueil
-          </Text>
+          </Global>
         </Link>
         <Link href="/">
-          <Text variant="h4" color="#bdbdbd" margin={16}>
+          <Global props={props}>
             Candidats
-          </Text>
+          </Global>
         </Link>
         <Link href="/">
-          <Text variant="h4" color="#bdbdbd" margin={16}>
+          <Global props={props}>
             Offres
-          </Text>
+          </Global>
         </Link>
         <Link href="/">
-          <Text variant="h4" color="#bdbdbd" margin={16}>
+          <Global props={props}>
             Administration
-          </Text>
+          </Global>
         </Link>
       </Container>
       <Container align="flex-start" justify="center" gap={0} flex={1}>
