@@ -1,39 +1,36 @@
-import React, { ReactNode } from 'react';
 import { User, Settings } from 'react-feather';
 import Container from '@components/Layouts/Container';
 import Text from '@components/DataDisplay/Text';
 import Link from '@components/DataDisplay/Link';
 
 type SideBarProps = {
-  check: string;
-  child: ReactNode;
-}
+  sideBarCurrent: string;
+};
 
-const SideBar = (props: SideBarProps) => {
-  const Global = (props: SideBarProps) => {
-    if (props.props.check === props.children)
+type GlobalProps = {
+  current: string;
+  title: string;
+};
+
+const SideBar = ({ sideBarCurrent }: SideBarProps) => {
+  const Global = ({ current, title }: GlobalProps) => {
+    if (current === title)
       return (
-        <Container
-            row
-            justify="flex-start"
-            align="flex-start"
-            gap={0}
-            flex={1}
-          >
+        <Container row justify="flex-start" align="flex-start" gap={0} flex={1}>
           <Text variant="h4" color="#000" margin={16}>
             •
           </Text>
           <Text variant="h4" color="#000" margin={16}>
-            {props.children}
+            {title}
           </Text>
         </Container>
       );
     return (
       <Text variant="h4" color="#bdbdbd" margin={16}>
-        {props.children}
+        {title}
       </Text>
     );
-  }
+  };
 
   return (
     <Container
@@ -60,24 +57,16 @@ const SideBar = (props: SideBarProps) => {
       </Container>
       <Container justify="center" align="flex-start" gap={0} flex={2}>
         <Link href="/">
-          <Global props={props}>
-            Accueil
-          </Global>
+          <Global current={sideBarCurrent} title="Accueil" />
         </Link>
         <Link href="/">
-          <Global props={props}>
-            Candidats
-          </Global>
+          <Global current={sideBarCurrent} title="Candidats" />
         </Link>
         <Link href="/">
-          <Global props={props}>
-            Offres
-          </Global>
+          <Global current={sideBarCurrent} title="Offres" />
         </Link>
         <Link href="/">
-          <Global props={props}>
-            Administration
-          </Global>
+          <Global current={sideBarCurrent} title="Administration" />
         </Link>
       </Container>
       <Container align="flex-start" justify="center" gap={0} flex={1}>
