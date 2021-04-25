@@ -4,16 +4,44 @@ import Container from '@components/Layouts/Container';
 import Text from '@components/DataDisplay/Text';
 import SideBar from '@components/Utils/SideBar';
 import { ThumbsUp, Users, Calendar } from 'react-feather';
+import { gql, useQuery } from '@apollo/client';
 
 const Accueil = () => {
+  const COMPANY_DATA = gql`
+    query {
+      company(id: "de612fcb-eff7-40da-aca1-e3d6c15f69b0") {
+        id
+        name
+        siret
+      }
+    }
+  `;
+
+  const GetCompanyInfo = () => {
+    const { loading, data } = useQuery(COMPANY_DATA, {
+      context: {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk5NTUxMzcsImp0aSI6ImMzOTRkZThlLWIzNjAtNGZjOS1iNTU2LTgzNTg1MmRjY2ViNyIsInVzZXJfaWQiOiIwYTI1NmQ5NS1kZjYwLTQ0NjgtYjczYy1hOWRlMWRkMDgzZWEiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.ZMGDiAjEizzyYPSW3TIETRXoau_e2jt5gaskaJLSoIo`,
+        },
+      },
+    });
+    if (loading) return <p>LOADING ...</p>;
+    return (
+      <>
+        Bonjour
+        {data.company.name}
+      </>
+    );
+  };
   return (
     <Container row align="stretch" flex={1} gap={0}>
       <SideBar sideBarCurrent="Accueil" />
       <Container flex={3} gap={8}>
         <Container justify="flex-start" align="flex-start" flex={1}>
           <Text variant="h3" color="#000000">
-            Bonjour Pierre
+            <GetCompanyInfo />
           </Text>
+
           <Container
             row
             justify="flex-start"
@@ -22,10 +50,10 @@ const Accueil = () => {
             flex={1}
           >
             <Text variant="p" color="#399">
-              Lundi
+              Mercredi
             </Text>
             <Text variant="p" color="#bdbdbd">
-              , 03 Mars 2021
+              , 28 Avril 2021
             </Text>
           </Container>
           <Container row align="flex-start" justify="stretch" gap={0} flex={20}>
