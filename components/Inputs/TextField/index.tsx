@@ -11,6 +11,7 @@ interface TextFieldProps
   extends Partial<Omit<StyledTextFieldProps, 'variant' | 'focused'>> {
   placeholder: string;
   onChange: (v: string) => void;
+  icon?: React.ReactNode;
   type?: 'text' | 'password' | 'email' | 'number' | 'search' | 'tel' | 'date';
   maxLength?: number;
   disabled?: boolean;
@@ -22,6 +23,7 @@ const TextField = ({
   size,
   placeholder,
   onChange,
+  icon,
   thickness = 'medium',
   type = 'text',
   maxLength = undefined,
@@ -59,6 +61,7 @@ const TextField = ({
         onClick={(): void => setFocused(!focused)}
       >
         <Container row>
+          <Container flex={0}>{icon}</Container>
           <TextFieldInput
             placeholder={placeholder}
             focused={focused}

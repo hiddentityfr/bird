@@ -1,8 +1,13 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
+const token = '';
+
 const client = new ApolloClient({
-  uri: 'https://api.hiddentity.fr/',
+  uri: 'http://api.hiddentity.fr/query',
   cache: new InMemoryCache(),
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
 });
 
 export default client;

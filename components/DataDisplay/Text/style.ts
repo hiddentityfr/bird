@@ -12,6 +12,7 @@ export type FontWeight =
   | 100;
 
 export interface StyledTextProps {
+  as: string;
   size: string;
   color: string;
   weight: FontWeight;

@@ -58,12 +58,12 @@ export const StyledTextField = styled.div<StyledTextFieldProps>`
   min-width: ${({ size }): string => {
     switch (size) {
       case 'long':
-        return '180px';
+        return '250px';
       case 'short':
-        return '120px';
+        return '150px';
       case 'medium':
       default:
-        return '150px';
+        return '180px';
     }
   }};
   padding: ${({ thickness }): string => {
@@ -104,4 +104,5 @@ export const TextFieldInput = styled.input<
     focused ? color.hover[variant] : color.base.text[variant]};
   font-size: ${theme.typography.small.size};
   font-family: Inter, sans-serif;
+  flex: 1;
 `;

@@ -4,7 +4,7 @@ import { theme } from '@utils';
 
 import { StyledText, StyledTextProps, FontWeight } from './style';
 
-interface TextProps extends Partial<Omit<StyledTextProps, 'size'>> {
+interface TextProps extends Partial<StyledTextProps> {
   children: ReactNode;
   variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'small';
 }
@@ -17,10 +17,11 @@ const Text = ({
   italic = false,
   bold = false,
   align = 'left',
+  size = theme.typography[variant].size,
 }: TextProps): JSX.Element => {
   return (
     <StyledText
-      size={theme.typography[variant].size}
+      size={size}
       color={color}
       weight={weight}
       italic={italic}
