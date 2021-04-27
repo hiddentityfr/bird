@@ -10,6 +10,7 @@ import { Container } from '@components/Layouts';
 
 import 'styles/inter.css';
 import 'styles/main.css';
+import { Sidebar } from '@components/Overlay';
 
 const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   const mounted = useMounted();
@@ -21,8 +22,15 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Container gap={0} style={{ minHeight: '100vh' }}>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <Component {...pageProps} />
+        <Container row gap={0} align="stretch">
+          <Container gap={0} style={{ minWidth: '300px', maxWidth: '350px' }}>
+            <Sidebar />
+          </Container>
+          <Container>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <Component {...pageProps} />
+          </Container>
+        </Container>
       </Container>
     </ThemeProvider>
   );

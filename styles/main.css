@@ -3,6 +3,7 @@
 
   /* Layout */
   --layout-radius: 5px;
+  --layout-radius-2x: 10px;
   --layout-space: 4px;
   --layout-space-2x: 8px;
   --layout-space-4x: 16px;
@@ -26,6 +27,9 @@
   --layout-space-gap-negative: -24px;
   --layout-space-gap-half-negative: -12px;
 
+  --color-grey: #f2f2f5;
+  --color-pink: #ffcce4;
+  --color-purple: #e4c1f9;
   --color-accents-8: #fafafa;
   --color-accents-7: #eaeaea;
   --color-accents-6: #999;
@@ -38,7 +42,6 @@
   --color-secondary: #000;
   --color-tertiary: #424242;
   --color-tertiary-inverted: #d1d5da;
-  --color-purple: #f81ce5;
   --color-teal: #339999;
   --color-error-default: #ff0000;
   --color-error-medium: #e60000;
