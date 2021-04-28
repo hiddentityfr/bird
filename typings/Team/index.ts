@@ -26,3 +26,4 @@ export type CreateTeamVars = { input: CreateTeamInput };
 export type CreateTeamResponse = { createTeam: ITeam };
 
 export type DeleteTeamVars = Node;
+export type DeleteTeamResponse = { deleteTeam: boolean };

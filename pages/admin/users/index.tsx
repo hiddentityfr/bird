@@ -8,11 +8,11 @@ import { day, theme } from '@utils';
 import { api } from '@services';
 
 import {
-  CompanyVars,
   CompanyResponse,
-  ICompany,
-  CompanyUserConnection,
   CompanyUser,
+  CompanyUserConnection,
+  CompanyVars,
+  ICompany,
 } from '@typings/Company';
 import {
   CreateInvitationResponse,
@@ -239,6 +239,11 @@ const Users = (): JSX.Element => {
           onClose={() => {
             router.back();
             setAddModalOpen(false);
+            setAddUser({
+              firstname: '',
+              lastname: '',
+              email: '',
+            });
           }}
         >
           <Container align="center">
