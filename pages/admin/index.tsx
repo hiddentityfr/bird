@@ -8,8 +8,6 @@ import { Container } from '@components/Layouts';
 import { Card, Link, Text } from '@components/DataDisplay';
 import { TextField } from '@components/Inputs';
 
-interface AdminProps {}
-
 const Admin = (): JSX.Element => {
   const cards = React.useMemo(
     () => [
