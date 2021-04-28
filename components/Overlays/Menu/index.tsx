@@ -9,8 +9,6 @@ import { Container, Spacer } from '@components/Layouts';
 import { Logo } from '@components/Medias/Icons';
 import { Link, Text } from '@components/DataDisplay';
 
-interface MenuProps {}
-
 const Menu = (): JSX.Element => {
   const { route } = useRouter();
 
