@@ -6,7 +6,7 @@ import React, {
   useContext,
 } from 'react';
 
-import { Scheme } from '@types';
+import { Scheme } from '@typings/Scheme';
 
 import { useColorScheme, useLocalStorage, useMounted } from '@hooks';
 

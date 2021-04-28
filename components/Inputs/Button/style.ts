@@ -68,12 +68,12 @@ export const StyledButton = styled.button<StyledButtonProps>`
   min-width: ${({ size }): string => {
     switch (size) {
       case 'long':
-        return '180px';
+        return '250px';
       case 'short':
-        return '120px';
+        return '150px';
       case 'medium':
       default:
-        return '150px';
+        return '180px';
     }
   }};
   padding: ${({ thickness }): string => {

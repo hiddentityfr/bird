@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { FlexContent } from '@types';
+import { FlexContent } from '@typings/FlexContent';
 
 export interface StyledAvatarProps {
   size: number;

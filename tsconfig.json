@@ -27,9 +27,9 @@
     "baseUrl": "./",
     "paths": {
       "@hooks": ["hooks"],
-      "@types": ["types"],
       "@utils": ["utils"],
       "@services": ["services"],
+      "@typings/*": ["typings/*"],
       "@components/*": ["components/*"],
       "@contexts/*": ["contexts/*"]
     }
