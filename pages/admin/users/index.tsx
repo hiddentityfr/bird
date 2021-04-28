@@ -150,7 +150,14 @@ const Users = (): JSX.Element => {
     variables: {
       input: addUser,
     },
-    onCompleted: (data) => console.log(data.createInvitation),
+    onCompleted: () => {
+      setAddUser({
+        firstname: '',
+        lastname: '',
+        email: '',
+      });
+      setAddModalOpen(false);
+    },
     onError: (error) =>
       console.error('Users > CreateInvitation > onError', error),
   });
@@ -261,7 +268,7 @@ const Users = (): JSX.Element => {
               size="long"
               onClick={() => {
                 createInvitation();
-                setAddModalOpen(false);
+                router.back();
               }}
             >
               Ajouter

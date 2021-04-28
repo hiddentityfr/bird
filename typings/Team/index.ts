@@ -17,3 +17,12 @@ export type TeamResponse = { company: GenericPagination<ITeam> };
 
 export type TeamsVars = PaginationFilterInput;
 export type TeamsResponse = { teams: TeamConnection };
+
+interface CreateTeamInput {
+  name: string;
+  companyID: string;
+}
+export type CreateTeamVars = { input: CreateTeamInput };
+export type CreateTeamResponse = { createTeam: ITeam };
+
+export type DeleteTeamVars = Node;

@@ -22,6 +22,16 @@ export const queries = {
         }
         teams {
           totalCount
+          edges {
+            node {
+              id
+              name
+              createdAt
+              users {
+                totalCount
+              }
+            }
+          }
         }
         invitations {
           totalCount
