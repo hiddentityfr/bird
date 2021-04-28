@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useRouter } from 'next/router';
 import { Search } from 'react-feather';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 
 import { day, theme } from '@utils';
 import { api } from '@services';
@@ -14,6 +14,10 @@ import {
   CompanyUserConnection,
   CompanyUser,
 } from '@typings/Company';
+import {
+  CreateInvitationResponse,
+  CreateInvitationVars,
+} from '@typings/Invitation';
 
 import { Container, Spacer } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
@@ -94,7 +98,9 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
                     >
                       <Container>
                         <Text key={d.node.id} variant="small">
-                          {t.format ? t.format(d.node[t.key]) : d.node[t.key]}
+                          {t.format
+                            ? t.format(d.node[t.key] ?? '-')
+                            : d.node[t.key] ?? '-'}
                         </Text>
                       </Container>
                     </Container>
@@ -103,9 +109,7 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
                 );
               })
             ) : (
-              <Text variant="small" align="center">
-                Loading...
-              </Text>
+              <Text variant="small">Loading...</Text>
             )}
           </Container>
         ))}
@@ -119,6 +123,24 @@ const Users = (): JSX.Element => {
 
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
   const [company, setCompany] = React.useState<ICompany>();
+
+  const [addUser, setAddUser] = React.useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+  });
+
+  const [createInvitation] = useMutation<
+    CreateInvitationResponse,
+    CreateInvitationVars
+  >(api.invitation.mutations.createInvitation, {
+    variables: {
+      input: addUser,
+    },
+    onCompleted: (data) => console.log(data.createInvitation),
+    onError: (error) =>
+      console.error('Users > CreateInvitation > onError', error),
+  });
 
   const titles = React.useMemo<TitleHead[]>(
     () => [
@@ -144,9 +166,6 @@ const Users = (): JSX.Element => {
   );
 
   useQuery<CompanyResponse, CompanyVars>(api.company.queries.company, {
-    variables: {
-      id: '20ca8b44-913d-46d8-973f-ee0ea172f85d',
-    },
     onCompleted: (data) => setCompany(data.company),
     onError: (error) => console.error('Users > Company > onError', error),
   });
@@ -244,21 +263,31 @@ const Users = (): JSX.Element => {
               placeholder="Prénom"
               thickness="large"
               size="long"
-              onChange={() => {}}
+              onChange={(v) => setAddUser({ ...addUser, firstname: v })}
             />
             <TextField
               placeholder="Nom"
               thickness="large"
               size="long"
-              onChange={() => {}}
+              onChange={(v) => setAddUser({ ...addUser, lastname: v })}
             />
             <TextField
               placeholder="Adresse e-mail"
               thickness="large"
               size="long"
-              onChange={() => {}}
+              onChange={(v) => setAddUser({ ...addUser, email: v })}
             />
-            <Button thickness="large" size="long">
+            <Button
+              disabled={
+                !(addUser.firstname && addUser.lastname && addUser.email)
+              }
+              thickness="large"
+              size="long"
+              onClick={() => {
+                createInvitation();
+                setAddModalOpen(false);
+              }}
+            >
               Ajouter
             </Button>
           </Container>
