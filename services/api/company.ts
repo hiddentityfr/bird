@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 
 export const queries = {
   company: gql`
-    query company($id: ID!) {
-      company(id: $id) {
+    query company {
+      company {
         id
         siret
         name
@@ -25,6 +25,14 @@ export const queries = {
         }
         invitations {
           totalCount
+          edges {
+            node {
+              id
+              email
+              firstname
+              lastname
+            }
+          }
         }
         offers {
           totalCount
