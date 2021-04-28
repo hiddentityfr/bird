@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { theme } from '@utils';
-import { FlexContent } from '@types';
+import { FlexContent } from '@typings/FlexContent';
 
 export interface StyledContainerProps {
   flex: number | string;

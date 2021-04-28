@@ -1,4 +1,4 @@
-type FlexContent =
+export type FlexContent =
   | 'flex-start'
   | 'flex-end'
   | 'space-around'
@@ -6,5 +6,3 @@ type FlexContent =
   | 'space-between'
   | 'stretch'
   | 'center';
-
-export default FlexContent;

@@ -9,8 +9,21 @@ export const queries = {
         name
         members {
           totalCount
+          edges {
+            node {
+              id
+              email
+              firstname
+              lastname
+              createdAt
+              updatedAt
+            }
+          }
         }
         teams {
+          totalCount
+        }
+        invitations {
           totalCount
         }
         offers {

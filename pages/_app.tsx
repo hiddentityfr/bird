@@ -10,7 +10,7 @@ import { Container } from '@components/Layouts';
 
 import 'styles/inter.css';
 import 'styles/main.css';
-import { Sidebar } from '@components/Overlay';
+import { Sidebar } from '@components/Overlays';
 
 const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   const mounted = useMounted();
