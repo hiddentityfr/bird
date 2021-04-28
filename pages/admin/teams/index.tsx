@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Search } from 'react-feather';
+import { Search, Trash2 } from 'react-feather';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 
@@ -10,6 +10,8 @@ import { day, theme } from '@utils';
 import {
   CreateTeamResponse,
   CreateTeamVars,
+  DeleteTeamResponse,
+  DeleteTeamVars,
   ITeam,
   TeamConnection,
 } from '@typings/Team';
@@ -27,16 +29,17 @@ import { Modal } from '@components/Overlays';
 
 type TitleHead = {
   label: string;
-  key: keyof ITeam;
+  key: keyof ITeam | 'actions';
   format?: <T>(p: T) => string;
 };
 
 interface TableProps {
   titles: TitleHead[];
   data?: TeamConnection;
+  onRemoveModal: (p: ITeam) => void;
 }
 
-const Table = ({ titles, data }: TableProps): JSX.Element => {
+const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
   return (
     <Container gap={0}>
       <Container row justify="space-evenly">
@@ -99,11 +102,20 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
                       }}
                     >
                       <Container>
-                        <Text key={d.node.id} variant="small">
-                          {t.format
-                            ? t.format(d.node[t.key] ?? '-')
-                            : d.node[t.key] ?? '-'}
-                        </Text>
+                        {t.key !== 'actions' ? (
+                          <Text key={d.node.id} variant="small">
+                            {t.format
+                              ? t.format(d.node[t.key] ?? '-')
+                              : d.node[t.key] ?? '-'}
+                          </Text>
+                        ) : (
+                          <Link
+                            href="#delete"
+                            onClick={() => onRemoveModal(d.node)}
+                          >
+                            <Trash2 size={16} color="red" />
+                          </Link>
+                        )}
                       </Container>
                     </Container>
                     <Spacer size={1} />
@@ -123,9 +135,19 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
 const Teams = (): JSX.Element => {
   const router = useRouter();
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
+  const [isRemoveModalOpen, setRemoveModalOpen] = React.useState(false);
 
   const [addTeamName, setAddTeamName] = React.useState<string>('');
   const [company, setCompany] = React.useState<ICompany>();
+  const [removableTeam, setRemovableTeam] = React.useState<ITeam>();
+
+  const { refetch } = useQuery<CompanyResponse, CompanyVars>(
+    api.company.queries.company,
+    {
+      onCompleted: (data) => setCompany(data.company),
+      onError: (error) => console.error('Teams > Company > onError', error),
+    }
+  );
 
   const [createTeam] = useMutation<CreateTeamResponse, CreateTeamVars>(
     api.team.mutations.createTeam,
@@ -144,10 +166,19 @@ const Teams = (): JSX.Element => {
     }
   );
 
-  useQuery<CompanyResponse, CompanyVars>(api.company.queries.company, {
-    onCompleted: (data) => setCompany(data.company),
-    onError: (error) => console.error('Teams > Company > onError', error),
-  });
+  const [deleteTeam] = useMutation<DeleteTeamResponse, DeleteTeamVars>(
+    api.team.mutations.deleteTeam,
+    {
+      variables: {
+        id: removableTeam?.id ?? '',
+      },
+      onCompleted: () => {
+        setRemovableTeam(undefined);
+        refetch();
+      },
+      onError: (error) => console.error('Teams > DeleteTeam > onError', error),
+    }
+  );
 
   const titles = React.useMemo<TitleHead[]>(
     () => [
@@ -165,6 +196,10 @@ const Teams = (): JSX.Element => {
         key: 'createdAt',
         label: 'Date de création',
         format: (p) => day(`${p}`).format('DD/MM/YYYY'),
+      },
+      {
+        key: 'actions',
+        label: 'Actions',
       },
     ],
     []
@@ -196,7 +231,14 @@ const Teams = (): JSX.Element => {
           </Container>
         </Container>
         <Container>
-          <Table titles={titles} data={company?.teams} />
+          <Table
+            onRemoveModal={(p) => {
+              setRemoveModalOpen(true);
+              setRemovableTeam(p);
+            }}
+            titles={titles}
+            data={company?.teams}
+          />
         </Container>
       </Container>
       {isAddModalOpen && (
@@ -206,6 +248,7 @@ const Teams = (): JSX.Element => {
           onClose={() => {
             router.back();
             setAddModalOpen(false);
+            setAddTeamName('');
           }}
         >
           <Container align="center">
@@ -226,6 +269,54 @@ const Teams = (): JSX.Element => {
             >
               Ajouter
             </Button>
+          </Container>
+        </Modal>
+      )}
+      {isRemoveModalOpen && (
+        <Modal
+          size="small"
+          title="Supprimer le membre ?"
+          onClose={() => {
+            setRemovableTeam(undefined);
+            setRemoveModalOpen(false);
+            router.back();
+          }}
+        >
+          <Container>
+            <Container>
+              <Text align="center" variant="small">
+                Vous êtes sur le point de supprimer l&apos;équipe :
+              </Text>
+              <Container>
+                <Text bold align="center" variant="small">
+                  {removableTeam?.name}
+                </Text>
+              </Container>
+              <Text align="center" variant="small">
+                Cette action est irréversible.
+              </Text>
+            </Container>
+            <Container row>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setRemovableTeam(undefined);
+                  setRemoveModalOpen(false);
+                  router.back();
+                }}
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={() => {
+                  deleteTeam();
+                  setRemoveModalOpen(false);
+                  router.back();
+                }}
+              >
+                Confirmer
+              </Button>
+            </Container>
           </Container>
         </Modal>
       )}
