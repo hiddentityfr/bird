@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Scheme } from '@types';
+import { Scheme } from '@typings/Scheme';
 
 interface PrefersColorScheme {
   query: MediaQueryList;
@@ -29,7 +29,7 @@ const getPrefersColorScheme = (defaultScheme: Scheme): PrefersColorScheme => {
   return prefersColorScheme;
 };
 
-export default (defaultScheme = 'light' as Scheme): Scheme => {
+const useColorScheme = (defaultScheme = 'light' as Scheme): Scheme => {
   const isMounted = useRef<boolean>(false);
   const prefersColorScheme = useRef<PrefersColorScheme>(
     getPrefersColorScheme(defaultScheme)
@@ -97,3 +97,5 @@ export default (defaultScheme = 'light' as Scheme): Scheme => {
 
   return scheme;
 };
+
+export default useColorScheme;
