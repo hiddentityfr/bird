@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useRouter } from 'next/router';
-import { Search } from 'react-feather';
+import { Search, Trash2 } from 'react-feather';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { day, theme } from '@utils';
@@ -26,16 +26,17 @@ import { Modal } from '@components/Overlays';
 
 interface TitleHead {
   label: string;
-  key: keyof CompanyUser;
+  key: keyof CompanyUser | 'actions';
   format?: <T>(p: T) => string;
 }
 
 interface TableProps {
   titles: TitleHead[];
   data?: CompanyUserConnection;
+  onRemoveModal: (p: CompanyUser) => void;
 }
 
-const Table = ({ titles, data }: TableProps): JSX.Element => {
+const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
   return (
     <Container gap={0}>
       <Container row justify="space-evenly" align="flex-start">
@@ -81,6 +82,7 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
                       }
                       align="flex-start"
                       style={{
+                        height: 40,
                         borderRadius: (() => {
                           if (i === 0) {
                             return `${theme.cvar(
@@ -97,11 +99,20 @@ const Table = ({ titles, data }: TableProps): JSX.Element => {
                       }}
                     >
                       <Container>
-                        <Text key={d.node.id} variant="small">
-                          {t.format
-                            ? t.format(d.node[t.key] ?? '-')
-                            : d.node[t.key] ?? '-'}
-                        </Text>
+                        {t.key !== 'actions' ? (
+                          <Text key={d.node.id} variant="small">
+                            {t.format
+                              ? t.format(d.node[t.key] ?? '-')
+                              : d.node[t.key] ?? '-'}
+                          </Text>
+                        ) : (
+                          <Link
+                            href="#delete"
+                            onClick={() => onRemoveModal(d.node)}
+                          >
+                            <Trash2 size={16} color="red" />
+                          </Link>
+                        )}
                       </Container>
                     </Container>
                     <Spacer size={1} />
@@ -122,8 +133,10 @@ const Users = (): JSX.Element => {
   const router = useRouter();
 
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
-  const [company, setCompany] = React.useState<ICompany>();
+  const [isRemoveModalOpen, setRemoveModalOpen] = React.useState(false);
+  const [removableUser, setRemovableUser] = React.useState<CompanyUser>();
 
+  const [company, setCompany] = React.useState<ICompany>();
   const [addUser, setAddUser] = React.useState({
     firstname: '',
     lastname: '',
@@ -161,6 +174,10 @@ const Users = (): JSX.Element => {
         label: "Date d'ajout",
         format: (p) => day(`${p}`).format('DD/MM/YYYY'),
       },
+      {
+        key: 'actions',
+        label: 'Actions',
+      },
     ],
     []
   );
@@ -169,54 +186,6 @@ const Users = (): JSX.Element => {
     onCompleted: (data) => setCompany(data.company),
     onError: (error) => console.error('Users > Company > onError', error),
   });
-
-  // const users = React.useMemo(
-  //   () => [
-  //     {
-  //       lastname: 'Ordonez',
-  //       firstname: 'Antoine',
-  //       email: 'antoine@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(1, 'month').subtract(10, 'd').format('DD/MM/YYYY'),
-  //     },
-  //     {
-  //       lastname: 'Sainson',
-  //       firstname: 'Yann',
-  //       email: 'yann@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(4, 'month').format('DD/MM/YYYY'),
-  //     },
-  //     {
-  //       lastname: 'Colombier',
-  //       firstname: 'Adrien',
-  //       email: 'adrien@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(8, 'month').subtract(22, 'd').format('DD/MM/YYYY'),
-  //     },
-  //     {
-  //       lastname: 'Flayac',
-  //       firstname: 'Quentin',
-  //       email: 'quentin@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(8, 'month').subtract(22, 'd').format('DD/MM/YYYY'),
-  //     },
-  //     {
-  //       lastname: 'Kesisoglou',
-  //       firstname: 'Ioannis',
-  //       email: 'ioannis@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(8, 'month').subtract(22, 'd').format('DD/MM/YYYY'),
-  //     },
-  //     {
-  //       lastname: 'Rieux',
-  //       firstname: 'Antonin',
-  //       email: 'antonin@hiddentity.fr',
-  //       team: 'Hiddentity',
-  //       date: day().subtract(8, 'month').subtract(22, 'd').format('DD/MM/YYYY'),
-  //     },
-  //   ],
-  //   []
-  // );
 
   return (
     <>
@@ -246,7 +215,14 @@ const Users = (): JSX.Element => {
           </Container>
         </Container>
         <Container>
-          {<Table titles={titles} data={company?.members} />}
+          <Table
+            titles={titles}
+            data={company?.members}
+            onRemoveModal={(p) => {
+              setRemoveModalOpen(true);
+              setRemovableUser(p);
+            }}
+          />
         </Container>
       </Container>
       {isAddModalOpen && (
@@ -290,6 +266,56 @@ const Users = (): JSX.Element => {
             >
               Ajouter
             </Button>
+          </Container>
+        </Modal>
+      )}
+      {isRemoveModalOpen && (
+        <Modal
+          size="small"
+          title="Supprimer le membre ?"
+          onClose={() => {
+            setRemovableUser(undefined);
+            setRemoveModalOpen(false);
+            router.back();
+          }}
+        >
+          <Container>
+            <Container>
+              <Text align="center" variant="small">
+                Vous êtes sur le point de supprimer le membre :
+              </Text>
+              <Container>
+                <Text bold align="center" variant="small">
+                  {removableUser?.firstname && removableUser.lastname
+                    ? `${removableUser.firstname} ${removableUser.lastname}`
+                    : removableUser?.email}
+                </Text>
+              </Container>
+              <Text align="center" variant="small">
+                Cette action est irréversible.
+              </Text>
+            </Container>
+            <Container row>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setRemovableUser(undefined);
+                  setRemoveModalOpen(false);
+                  router.back();
+                }}
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={() => {
+                  // TODO: call a handleDelete function that calls deleteCompanyUser
+                  setRemoveModalOpen(false);
+                  router.back();
+                }}
+              >
+                Confirmer
+              </Button>
+            </Container>
           </Container>
         </Modal>
       )}
