@@ -9,8 +9,6 @@ import { Logo } from '@components/Medias/Icons';
 import { Link, Text } from '@components/DataDisplay';
 import { useRouter } from 'next/router';
 
-interface SidebarProps {}
-
 const Sidebar = (): JSX.Element => {
   const { route } = useRouter();
 
