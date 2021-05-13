@@ -13,6 +13,8 @@ const Accueil = () => {
         id
         name
         siret
+        createdAt
+        updatedAt
       }
     }
   `;
