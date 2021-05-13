@@ -9,7 +9,7 @@ import { gql, useQuery } from '@apollo/client';
 const Accueil = () => {
   const COMPANY_DATA = gql`
     query {
-      company(id: "de612fcb-eff7-40da-aca1-e3d6c15f69b0") {
+      company {
         id
         name
         siret
@@ -18,17 +18,18 @@ const Accueil = () => {
   `;
 
   const GetCompanyInfo = () => {
-    const { loading, data } = useQuery(COMPANY_DATA, {
+    const { error, loading, data } = useQuery(COMPANY_DATA, {
       context: {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTk5NTUxMzcsImp0aSI6ImMzOTRkZThlLWIzNjAtNGZjOS1iNTU2LTgzNTg1MmRjY2ViNyIsInVzZXJfaWQiOiIwYTI1NmQ5NS1kZjYwLTQ0NjgtYjczYy1hOWRlMWRkMDgzZWEiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.ZMGDiAjEizzyYPSW3TIETRXoau_e2jt5gaskaJLSoIo`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjE1NDk4ODAsImp0aSI6Ijk4MmU5ZjAyLTZkMTgtNDFmZi1iMDU1LWQwYmZmYzU1MWZlMSIsInVzZXJfaWQiOiIwYTI1NmQ5NS1kZjYwLTQ0NjgtYjczYy1hOWRlMWRkMDgzZWEiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.bt4JSk8DzU9xhgEVnRVKHc7X7R9a5kFJxKmoThf8SeM`,
         },
       },
     });
     if (loading) return <p>LOADING ...</p>;
+    if (error) return <p>ERROR</p>;
     return (
       <>
-        Bonjour
+        Bonjour&nbsp;
         {data.company.name}
       </>
     );
