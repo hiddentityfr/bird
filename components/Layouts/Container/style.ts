@@ -11,6 +11,7 @@ export interface StyledContainerProps {
   justify: FlexContent;
   align: FlexContent;
   bg: string;
+  rounded: boolean;
   gap: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 }
 
@@ -28,4 +29,5 @@ export const StyledContainer = styled.div<StyledContainerProps>`
 
   // Style
   background-color: ${({ bg }) => bg};
+  border-radius: ${({ rounded }) => (rounded) ? '5px' : '0px'};
 `;
