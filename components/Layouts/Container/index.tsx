@@ -18,6 +18,7 @@ const Container = ({
   justify = 'flex-start',
   align = row ? 'center' : 'stretch',
   bg = 'transparent',
+  rounded = false,
   style,
   title,
   gap = 3,
@@ -26,6 +27,7 @@ const Container = ({
     <StyledContainer
       style={style}
       bg={bg}
+      rounded={rounded}
       flex={flex}
       row={row}
       reverse={reverse}
