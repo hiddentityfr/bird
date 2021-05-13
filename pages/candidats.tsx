@@ -5,8 +5,43 @@ import Text from '@components/DataDisplay/Text';
 import TextField from '@components/Inputs/TextField';
 import SideBar from '@components/Utils/SideBar';
 import { MoreHorizontal } from 'react-feather';
+import { gql, useQuery } from '@apollo/client';
+
 
 const Candidats = () => {
+
+  const COMPANY_DATA = gql`
+  query {
+    company {
+      id
+      name
+      siret
+      createdAt
+      updatedAt
+      invitations {totalCount}
+      offers {totalCount}
+    }
+  }
+`;
+
+const GetCompanyInfo = () => {
+  const { error, loading, data } = useQuery(COMPANY_DATA, {
+    context: {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjE1NDk4ODAsImp0aSI6Ijk4MmU5ZjAyLTZkMTgtNDFmZi1iMDU1LWQwYmZmYzU1MWZlMSIsInVzZXJfaWQiOiIwYTI1NmQ5NS1kZjYwLTQ0NjgtYjczYy1hOWRlMWRkMDgzZWEiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.bt4JSk8DzU9xhgEVnRVKHc7X7R9a5kFJxKmoThf8SeM`,
+      },
+    },
+    });
+    if (loading) return <p>LOADING ...</p>;
+    if (error) return <p>ERROR</p>;
+    console.log(data)
+    return (
+      <>
+        <p>success</p>
+      </>
+    )
+  };
+
   return (
     <Container row align="stretch" flex={1} gap={0}>
       <SideBar sideBarCurrent="Candidats"/>
@@ -23,7 +58,7 @@ const Candidats = () => {
         </Container>
         <Container row justify="space-between" align="flex-start" flex={5}>
           
-          
+          <GetCompanyInfo />
           <Container justify="space-between" align="space-around" flex={1} gap={6}>
             <Container row justify="space-between" align="space-around" flex={1}>
               <Text variant="h4">En attente</Text>
