@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjAyMDA1MzksImp0aSI6ImQ1M2ZlOWIxLTkyZTUtNDExNC05MTY1LTQ4ZWZjNzUxYzNmZCIsInVzZXJfaWQiOiJjN2M0OGZlNS0zNDE4LTQ2MWItYjUyMy1mMzBhYWY1NWRlNjQiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.yfcglQcOfj9297Z4k_4Te-IbDYlcQnqzegucJ4dbybc';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjIwMzc4OTgsImp0aSI6IjU5ZGExY2RiLWUzZjctNDUyZi04ZWM1LTliMjczOTM2MmQ4ZCIsInVzZXJfaWQiOiJjN2M0OGZlNS0zNDE4LTQ2MWItYjUyMy1mMzBhYWY1NWRlNjQiLCJ1c2VyX3R5cGUiOiJDb21wYW55IiwiVG9rZW5UeXBlIjowfQ.0FXuSfD5a09lvxR-H6QpmRsiHqrHZU8-BAXKFgkwhbs';
 
 const httpLink = createHttpLink({
   uri: 'http://api.hiddentity.fr/query',
@@ -22,6 +22,9 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: { fetchPolicy: 'cache-and-network' },
+  },
 });
 
 export default client;

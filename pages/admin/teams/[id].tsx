@@ -1,29 +1,26 @@
 import * as React from 'react';
-
 import { useRouter } from 'next/router';
-import { Search, Trash2 } from 'react-feather';
-import { useMutation, useQuery } from '@apollo/client';
+import Loader from 'react-loader-spinner';
 
 import { day, theme } from '@utils';
-import { api } from '@services';
 
+import { AddCompanyUserToTeamVars, ITeam } from '@typings/Team';
+
+import { Container, Spacer } from '@components/Layouts';
+import { Link, Text } from '@components/DataDisplay';
+
+import { AuthActions, useAuth } from '@contexts/AuthContext';
+import { Trash2 } from 'react-feather';
 import {
   CompanyResponse,
   CompanyUser,
   CompanyUserConnection,
   CompanyVars,
 } from '@typings/Company';
-import {
-  CreateInvitationResponse,
-  CreateInvitationVars,
-} from '@typings/Invitation';
-
-import { Container, Spacer } from '@components/Layouts';
-import { Link, Text } from '@components/DataDisplay';
-import { Button, TextField } from '@components/Inputs';
 import { Modal } from '@components/Overlays';
-
-import { AuthActions, useAuth } from '@contexts/AuthContext';
+import { Autocomplete, Button } from '@components/Inputs';
+import { useLazyQuery, useMutation } from '@apollo/client';
+import { api } from '@services';
 
 interface TitleHead {
   label: string;
@@ -132,38 +129,47 @@ const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
   );
 };
 
-const Users = (): JSX.Element => {
+const Team = (): JSX.Element => {
   const router = useRouter();
   const [{ company }, dispatch] = useAuth();
 
+  const [team, setTeam] = React.useState<ITeam>();
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
-  const [isRemoveModalOpen, setRemoveModalOpen] = React.useState(false);
-  const [removableUser, setRemovableUser] = React.useState<CompanyUser>();
+  const [userToAdd, setUserToAdd] = React.useState<CompanyUser>();
 
-  const [addUser, setAddUser] = React.useState({
-    firstname: '',
-    lastname: '',
-    email: '',
-  });
+  const [fetchCompany] = useLazyQuery<CompanyResponse, CompanyVars>(
+    api.company.queries.company,
+    {
+      fetchPolicy: 'network-only',
+      onCompleted: (data) => {
+        dispatch({
+          type: AuthActions.UPDATE_COMPANY,
+          props: {
+            company: data.company,
+          },
+        });
+      },
+    }
+  );
 
-  const [createInvitation] = useMutation<
-    CreateInvitationResponse,
-    CreateInvitationVars
-  >(api.invitation.mutations.createInvitation, {
-    variables: {
-      input: addUser,
-    },
-    onCompleted: () => {
-      setAddUser({
-        firstname: '',
-        lastname: '',
-        email: '',
-      });
-      setAddModalOpen(false);
-    },
-    onError: (error) =>
-      console.error('Users > CreateInvitation > onError', error),
-  });
+  const [addCompanyUserToTeam] = useMutation<unknown, AddCompanyUserToTeamVars>(
+    api.team.mutations.addCompanyUserToTeam,
+    {
+      onCompleted: () => {
+        fetchCompany();
+        setUserToAdd(undefined);
+      },
+    }
+  );
+
+  React.useEffect(() => {
+    if (company?.teams?.edges) {
+      const foundTeam = company.teams.edges.find(
+        (e) => e.node.id === (router.query.id as string)
+      );
+      setTeam(foundTeam?.node);
+    }
+  }, [company?.teams?.edges, router.query.id]);
 
   const titles = React.useMemo<TitleHead[]>(
     () => [
@@ -180,11 +186,6 @@ const Users = (): JSX.Element => {
         label: 'Email',
       },
       {
-        key: 'createdAt',
-        label: "Date d'ajout",
-        format: (p) => day(`${p}`).format('DD/MM/YYYY'),
-      },
-      {
         key: 'actions',
         label: 'Actions',
       },
@@ -192,73 +193,57 @@ const Users = (): JSX.Element => {
     []
   );
 
-  const { refetch } = useQuery<CompanyResponse, CompanyVars>(
-    api.company.queries.company,
-    {
-      fetchPolicy: 'cache-and-network',
-      onCompleted: (data) =>
-        dispatch({
-          type: AuthActions.UPDATE_COMPANY,
-          props: {
-            company: data.company,
-          },
-        }),
-      onError: (error) => console.error('Users > Company > onError', error),
-    }
-  );
-
-  const [deleteCompanyUser] = useMutation(
-    api.company.mutations.deleteCompanyUser,
-    {
-      variables: {
-        id: removableUser?.id ?? '',
-      },
-      onCompleted: () => {
-        setRemovableUser(undefined);
-        router.back();
-        refetch();
-      },
-      onError: (error) => console.error('Users > Company > onError', error),
-    }
-  );
-
   return (
     <>
       <Container flex={0}>
         <Container row justify="space-between">
           <Container>
-            <Text variant="h3">Membres</Text>
+            <Text variant="h3">Équipe</Text>
           </Container>
-          <Container flex={0} row>
-            <Container>
-              <Link href="#add" onClick={() => setAddModalOpen(true)}>
+        </Container>
+        {team ? (
+          <Container>
+            <Container row>
+              <Container gap={0}>
+                <Text variant="h4">{team.name}</Text>
+              </Container>
+              <Link
+                href={`${team.id}#add-member`}
+                onClick={() => setAddModalOpen(true)}
+              >
                 <Text color={theme.cvar('colorTeal')} bold variant="small">
-                  + Ajouter un membre
+                  + Ajouter un membre à l&apos;équipe
                 </Text>
               </Link>
             </Container>
-            <Container>
-              <TextField
-                gap={0}
-                icon={<Search />}
-                size="long"
-                thickness="large"
-                placeholder="Rechercher un membre..."
-                onChange={() => {}}
+            {team.users.totalCount > 0 && (
+              <Table
+                titles={titles}
+                data={team.users}
+                onRemoveModal={() => {
+                  // setRemoveModalOpen(true);
+                  // setRemovableUser(p);
+                }}
               />
+            )}
+            <Container>
+              <Text variant="small">
+                {`Équipe créée le ${day(team.createdAt).format('DD/MM/YYYY')}`}
+              </Text>
+              <Text variant="small">
+                {`Dernière modification le ${day(team.updatedAt).format(
+                  'DD/MM/YYYY'
+                )}`}
+              </Text>
             </Container>
           </Container>
-        </Container>
-        <Container>
-          <Table
-            titles={titles}
-            data={company?.members}
-            onRemoveModal={(p) => {
-              setRemoveModalOpen(true);
-              setRemovableUser(p);
-            }}
-          />
-        </Container>
+        ) : (
+          <Container align="center" flex={0}>
+            <div style={{ transform: 'scale(0.5)' }}>
+              <Loader color="#000" width={100} height={100} type="ThreeDots" />
+            </div>
+          </Container>
+        )}
       </Container>
       {isAddModalOpen && (
         <Modal
@@ -266,42 +251,42 @@ const Users = (): JSX.Element => {
           size="small"
           onClose={() => {
             router.back();
+            setUserToAdd(undefined);
             setAddModalOpen(false);
-            setAddUser({
-              firstname: '',
-              lastname: '',
-              email: '',
-            });
           }}
         >
-          <Container align="center">
-            <TextField
-              placeholder="Prénom"
+          <Container align="stretch">
+            <Autocomplete
+              placeholder="Tapez le nom d'un membre"
               thickness="large"
               size="long"
-              onChange={(v) => setAddUser({ ...addUser, firstname: v })}
-            />
-            <TextField
-              placeholder="Nom"
-              thickness="large"
-              size="long"
-              onChange={(v) => setAddUser({ ...addUser, lastname: v })}
-            />
-            <TextField
-              placeholder="Adresse e-mail"
-              thickness="large"
-              size="long"
-              onChange={(v) => setAddUser({ ...addUser, email: v })}
+              options={
+                company?.members?.edges
+                  ?.filter(
+                    (e) =>
+                      !team?.users.edges?.find((u) => u.node.id === e.node.id)
+                  )
+                  .map((e) => ({
+                    value: e.node,
+                    label: `${e.node.firstname} ${e.node.lastname} (${e.node.email})`,
+                  })) ?? []
+              }
+              onSelect={(e) => setUserToAdd(e)}
+              onChange={() => setUserToAdd(undefined)}
             />
             <Button
-              disabled={
-                !(addUser.firstname && addUser.lastname && addUser.email)
-              }
+              disabled={!userToAdd}
               thickness="large"
               size="long"
               onClick={() => {
-                createInvitation();
                 router.back();
+                addCompanyUserToTeam({
+                  variables: {
+                    id: team?.id as string,
+                    userID: userToAdd?.id as string,
+                  },
+                });
+                setAddModalOpen(false);
               }}
             >
               Ajouter
@@ -309,58 +294,8 @@ const Users = (): JSX.Element => {
           </Container>
         </Modal>
       )}
-      {isRemoveModalOpen && (
-        <Modal
-          size="small"
-          title="Supprimer le membre ?"
-          onClose={() => {
-            setRemovableUser(undefined);
-            setRemoveModalOpen(false);
-            router.back();
-          }}
-        >
-          <Container>
-            <Container>
-              <Text align="center" variant="small">
-                Vous êtes sur le point de supprimer le membre :
-              </Text>
-              <Container>
-                <Text bold align="center" variant="small">
-                  {removableUser?.firstname && removableUser.lastname
-                    ? `${removableUser.firstname} ${removableUser.lastname}`
-                    : removableUser?.email}
-                </Text>
-              </Container>
-              <Text align="center" variant="small">
-                Cette action est irréversible.
-              </Text>
-            </Container>
-            <Container row>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setRemovableUser(undefined);
-                  setRemoveModalOpen(false);
-                  router.back();
-                }}
-              >
-                Annuler
-              </Button>
-              <Button
-                onClick={() => {
-                  // TODO: call a handleDelete function that calls deleteCompanyUser
-                  deleteCompanyUser();
-                  setRemoveModalOpen(false);
-                }}
-              >
-                Confirmer
-              </Button>
-            </Container>
-          </Container>
-        </Modal>
-      )}
     </>
   );
 };
 
-export default Users;
+export default Team;

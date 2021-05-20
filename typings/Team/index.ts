@@ -13,7 +13,7 @@ export interface ITeam extends Node {
 export type TeamConnection = GenericPagination<ITeam>;
 
 export type TeamVars = Partial<Node>;
-export type TeamResponse = { company: GenericPagination<ITeam> };
+export type TeamResponse = { team: ITeam };
 
 export type TeamsVars = PaginationFilterInput;
 export type TeamsResponse = { teams: TeamConnection };
@@ -27,3 +27,5 @@ export type CreateTeamResponse = { createTeam: ITeam };
 
 export type DeleteTeamVars = Node;
 export type DeleteTeamResponse = { deleteTeam: boolean };
+
+export type AddCompanyUserToTeamVars = Node & { userID: string };

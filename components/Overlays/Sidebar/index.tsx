@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { useRouter } from 'next/router';
 import { User, Settings } from 'react-feather';
 
 import { theme } from '@utils';
@@ -7,7 +8,6 @@ import { theme } from '@utils';
 import { Container, Spacer } from '@components/Layouts';
 import { Logo } from '@components/Medias/Icons';
 import { Link, Text } from '@components/DataDisplay';
-import { useRouter } from 'next/router';
 
 const Sidebar = (): JSX.Element => {
   const { route } = useRouter();
@@ -35,7 +35,7 @@ const Sidebar = (): JSX.Element => {
           </Container>
           <Container gap={0} justify="center">
             {nav.map((e) => (
-              <Container flex={0}>
+              <Container flex={0} key={e.route}>
                 <Link key={e.name} href={e.route}>
                   <Text
                     color={theme.cvar(
