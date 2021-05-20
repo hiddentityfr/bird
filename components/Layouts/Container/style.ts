@@ -29,5 +29,5 @@ export const StyledContainer = styled.div<StyledContainerProps>`
 
   // Style
   background-color: ${({ bg }) => bg};
-  border-radius: ${({ rounded }) => (rounded) ? '5px' : '0px'};
+  border-radius: ${({ rounded }) => (rounded ? '5px' : '0px')};
 `;
