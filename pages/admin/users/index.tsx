@@ -229,7 +229,7 @@ const Users = (): JSX.Element => {
           <Container>
             <Text variant="h3">Membres</Text>
           </Container>
-          <Container flex={0} row>
+          <Container flex={0} row gap={0}>
             <Container>
               <Link href="#add" onClick={() => setAddModalOpen(true)}>
                 <Text color={theme.cvar('colorTeal')} bold variant="small">

@@ -56,7 +56,7 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Container gap={0} style={{ minHeight: '100vh' }}>
-        <Container row gap={0} align="stretch">
+        <Container row gap={0} align="stretch" noWrap>
           <Container gap={0} style={{ minWidth: '300px', maxWidth: '350px' }}>
             <Sidebar />
           </Container>
