@@ -1,36 +1,81 @@
 import * as React from 'react';
 
-import { Search, Users, Grid } from 'react-feather';
+import { gql, useQuery } from '@apollo/client';
+import { Grid, Search, Users } from 'react-feather';
 
 import { theme } from '@utils';
+
+import { CompanyResponse, CompanyUser } from '@typings/Company';
+import { GenericPagination } from '@typings/GraphQL';
+import { ITeam } from '@typings/Team';
 
 import { Container } from '@components/Layouts';
 import { Card, Link, Text } from '@components/DataDisplay';
 import { TextField } from '@components/Inputs';
 
+import { AuthActions, useAuth } from '@contexts/AuthContext';
+
 const Admin = (): JSX.Element => {
+  const [{ company }, dispatch] = useAuth();
+
+  useQuery<CompanyResponse>(
+    gql`
+      query company {
+        company {
+          teams {
+            totalCount
+          }
+          members {
+            totalCount
+          }
+        }
+      }
+    `,
+    {
+      fetchPolicy: 'cache-and-network',
+      onCompleted: (data) => {
+        dispatch({
+          type: AuthActions.UPDATE_COMPANY,
+          props: {
+            company: {
+              ...company,
+              teams: {
+                ...(company?.teams as GenericPagination<ITeam>),
+                totalCount: data.company.teams.totalCount,
+              },
+              members: {
+                ...(company?.members as GenericPagination<CompanyUser>),
+                totalCount: data.company.members.totalCount,
+              },
+            },
+          },
+        });
+      },
+    }
+  );
+
   const cards = React.useMemo(
     () => [
       {
-        number: '6',
-        label: 'Membres',
+        number: `${company?.members?.totalCount ?? '-'}`,
+        label: (company?.members?.totalCount ?? 0) > 1 ? 'Membres' : 'Membre',
         icon: <Users color={theme.cvar('colorPurple')} />,
         color: 'rgba(228, 193, 249, 0.15)',
         link: '/admin/users',
       },
       {
-        number: '3',
-        label: 'Équipes',
+        number: `${company?.teams?.totalCount ?? '-'}`,
+        label: (company?.teams?.totalCount ?? 0) > 1 ? 'Équipes' : 'Équipe',
         icon: <Grid color={theme.cvar('colorPink')} />,
         color: 'rgba(255, 153, 201, 0.15)',
         link: '/admin/teams',
       },
     ],
-    []
+    [company?.members?.totalCount, company?.teams?.totalCount]
   );
 
   return (
-    <Container flex={0}>
+    <Container flex={0} title="Administration">
       <Container row justify="space-between">
         <Container>
           <Text variant="h3">Administration</Text>

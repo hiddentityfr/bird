@@ -19,13 +19,13 @@ import {
   CompanyResponse,
   CompanyUserConnection,
   CompanyVars,
-  ICompany,
 } from '@typings/Company';
 
 import { Container, Spacer } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
 import { Button, TextField } from '@components/Inputs';
 import { Modal } from '@components/Overlays';
+import { AuthActions, useAuth } from '@contexts/AuthContext';
 
 type TitleHead = {
   label: string;
@@ -75,51 +75,53 @@ const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
             {data ? (
               data.edges?.map((d, index) => {
                 return (
-                  <Container gap={0}>
-                    <Container
-                      gap={0}
-                      bg={
-                        index % 2 === 1
-                          ? theme.cvar('colorGrey')
-                          : 'transparent'
-                      }
-                      align="flex-start"
-                      style={{
-                        height: 40,
-                        borderRadius: (() => {
-                          if (i === 0) {
-                            return `${theme.cvar(
-                              'layoutRadius2x'
-                            )} 0 0 ${theme.cvar('layoutRadius2x')}`;
-                          }
-                          if (i === titles.length - 1) {
-                            return `0 ${theme.cvar(
-                              'layoutRadius2x'
-                            )} ${theme.cvar('layoutRadius2x')} 0`;
-                          }
-                          return undefined;
-                        })(),
-                      }}
-                    >
-                      <Container>
-                        {t.key !== 'actions' ? (
-                          <Text key={d.node.id} variant="small">
-                            {t.format
-                              ? t.format(d.node[t.key] ?? '-')
-                              : d.node[t.key] ?? '-'}
-                          </Text>
-                        ) : (
-                          <Link
-                            href="#delete"
-                            onClick={() => onRemoveModal(d.node)}
-                          >
-                            <Trash2 size={16} color="red" />
-                          </Link>
-                        )}
+                  <Link href={`/admin/teams/${d.node.id}`} key={d.node.id}>
+                    <Container gap={0}>
+                      <Container
+                        gap={0}
+                        bg={
+                          index % 2 === 1
+                            ? theme.cvar('colorGrey')
+                            : 'transparent'
+                        }
+                        align="flex-start"
+                        style={{
+                          height: 40,
+                          borderRadius: (() => {
+                            if (i === 0) {
+                              return `${theme.cvar(
+                                'layoutRadius2x'
+                              )} 0 0 ${theme.cvar('layoutRadius2x')}`;
+                            }
+                            if (i === titles.length - 1) {
+                              return `0 ${theme.cvar(
+                                'layoutRadius2x'
+                              )} ${theme.cvar('layoutRadius2x')} 0`;
+                            }
+                            return undefined;
+                          })(),
+                        }}
+                      >
+                        <Container>
+                          {t.key !== 'actions' ? (
+                            <Text key={d.node.id} variant="small">
+                              {t.format
+                                ? t.format(d.node[t.key] ?? '-')
+                                : d.node[t.key] ?? '-'}
+                            </Text>
+                          ) : (
+                            <Link
+                              href="#delete"
+                              onClick={() => onRemoveModal(d.node)}
+                            >
+                              <Trash2 size={16} color="red" />
+                            </Link>
+                          )}
+                        </Container>
                       </Container>
+                      <Spacer size={1} />
                     </Container>
-                    <Spacer size={1} />
-                  </Container>
+                  </Link>
                 );
               })
             ) : (
@@ -134,17 +136,24 @@ const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
 
 const Teams = (): JSX.Element => {
   const router = useRouter();
+  const [{ company }, dispatch] = useAuth();
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
   const [isRemoveModalOpen, setRemoveModalOpen] = React.useState(false);
 
   const [addTeamName, setAddTeamName] = React.useState<string>('');
-  const [company, setCompany] = React.useState<ICompany>();
   const [removableTeam, setRemovableTeam] = React.useState<ITeam>();
 
   const { refetch } = useQuery<CompanyResponse, CompanyVars>(
     api.company.queries.company,
     {
-      onCompleted: (data) => setCompany(data.company),
+      fetchPolicy: 'cache-and-network',
+      onCompleted: (data) =>
+        dispatch({
+          type: AuthActions.UPDATE_COMPANY,
+          props: {
+            company: data.company,
+          },
+        }),
       onError: (error) => console.error('Teams > Company > onError', error),
     }
   );
@@ -155,12 +164,13 @@ const Teams = (): JSX.Element => {
       variables: {
         input: {
           name: addTeamName,
-          companyID: company ? company.id : '',
+          companyID: company?.id ? company.id : '',
         },
       },
       onCompleted: () => {
         setAddTeamName('');
         setAddModalOpen(false);
+        refetch();
       },
       onError: (error) => console.error('Teams > CreateTeam > onError', error),
     }
@@ -243,7 +253,7 @@ const Teams = (): JSX.Element => {
       </Container>
       {isAddModalOpen && (
         <Modal
-          title="Ajouter un membre"
+          title="Ajouter une équipe"
           size="small"
           onClose={() => {
             router.back();

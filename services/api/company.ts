@@ -29,6 +29,14 @@ export const queries = {
               createdAt
               users {
                 totalCount
+                edges {
+                  node {
+                    id
+                    firstname
+                    lastname
+                    email
+                  }
+                }
               }
             }
           }
@@ -80,6 +88,19 @@ export const queries = {
       }
     }
   `,
+  companyUser: gql`
+    query companyUser($id: ID!) {
+      companyUser(id: $id) {
+        id
+        email
+        emailVerified
+        firstname
+        lastname
+        createdAt
+        updatedAt
+      }
+    }
+  `,
 };
 
 export const mutations = {
@@ -100,6 +121,11 @@ export const mutations = {
   deleteCompany: gql`
     mutation deleteCompany($id: ID!) {
       deleteCompany(id: $id)
+    }
+  `,
+  deleteCompanyUser: gql`
+    mutation deleteCompanyUser($id: ID!) {
+      deleteCompanyUser(id: $id)
     }
   `,
 };

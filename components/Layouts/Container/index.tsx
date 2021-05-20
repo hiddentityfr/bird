@@ -1,10 +1,12 @@
 import React, { CSSProperties, ReactNode } from 'react';
+import Head from 'next/head';
 
 import { StyledContainer, StyledContainerProps } from './style';
 
 interface ContainerProps extends Partial<StyledContainerProps> {
   children: ReactNode;
   style?: CSSProperties;
+  title?: string;
 }
 
 const Container = ({
@@ -17,6 +19,7 @@ const Container = ({
   align = row ? 'center' : 'stretch',
   bg = 'transparent',
   style,
+  title,
   gap = 3,
 }: ContainerProps): JSX.Element => {
   return (
@@ -31,6 +34,11 @@ const Container = ({
       align={align}
       gap={gap}
     >
+      {title && (
+        <Head>
+          <title>{`${title} • hiddentity.fr`}</title>
+        </Head>
+      )}
       {children}
     </StyledContainer>
   );
