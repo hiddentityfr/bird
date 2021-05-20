@@ -82,4 +82,11 @@ export const mutations = {
       }
     }
   `,
+  removeCompanyUserFromTeam: gql`
+    mutation removeCompanyUserFromTeam($id: ID!, $userID: ID!) {
+      removeCompanyUserFromTeam(id: $id, userID: $userID) {
+        id
+      }
+    }
+  `,
 };

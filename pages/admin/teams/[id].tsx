@@ -4,7 +4,11 @@ import Loader from 'react-loader-spinner';
 
 import { day, theme } from '@utils';
 
-import { AddCompanyUserToTeamVars, ITeam } from '@typings/Team';
+import {
+  AddCompanyUserToTeamVars,
+  ITeam,
+  RemoveCompanyUserFromTeamVars,
+} from '@typings/Team';
 
 import { Container, Spacer } from '@components/Layouts';
 import { Link, Text } from '@components/DataDisplay';
@@ -29,12 +33,18 @@ interface TitleHead {
 }
 
 interface TableProps {
+  teamID: string;
   titles: TitleHead[];
   data?: CompanyUserConnection;
   onRemoveModal: (p: CompanyUser) => void;
 }
 
-const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
+const Table = ({
+  teamID,
+  titles,
+  data,
+  onRemoveModal,
+}: TableProps): JSX.Element => {
   return (
     <Container gap={0}>
       <Container row justify="space-evenly" align="flex-start">
@@ -106,7 +116,7 @@ const Table = ({ titles, data, onRemoveModal }: TableProps): JSX.Element => {
                             </Text>
                           ) : (
                             <Link
-                              href="#delete"
+                              href={`${teamID}#delete-member`}
                               onClick={() => onRemoveModal(d.node)}
                             >
                               <Trash2 size={16} color="red" />
@@ -135,7 +145,9 @@ const Team = (): JSX.Element => {
 
   const [team, setTeam] = React.useState<ITeam>();
   const [isAddModalOpen, setAddModalOpen] = React.useState(false);
+  const [isRemoveModalOpen, setRemoveModalOpen] = React.useState(false);
   const [userToAdd, setUserToAdd] = React.useState<CompanyUser>();
+  const [removableUser, setRemovableUser] = React.useState<CompanyUser>();
 
   const [fetchCompany] = useLazyQuery<CompanyResponse, CompanyVars>(
     api.company.queries.company,
@@ -155,12 +167,30 @@ const Team = (): JSX.Element => {
   const [addCompanyUserToTeam] = useMutation<unknown, AddCompanyUserToTeamVars>(
     api.team.mutations.addCompanyUserToTeam,
     {
+      variables: {
+        id: team?.id as string,
+        userID: userToAdd?.id as string,
+      },
       onCompleted: () => {
         fetchCompany();
         setUserToAdd(undefined);
       },
     }
   );
+
+  const [removeCompanyUserFromTeam] = useMutation<
+    unknown,
+    RemoveCompanyUserFromTeamVars
+  >(api.team.mutations.removeCompanyUserFromTeam, {
+    variables: {
+      id: team?.id as string,
+      userID: removableUser?.id as string,
+    },
+    onCompleted: () => {
+      fetchCompany();
+      setRemovableUser(undefined);
+    },
+  });
 
   React.useEffect(() => {
     if (company?.teams?.edges) {
@@ -216,16 +246,6 @@ const Team = (): JSX.Element => {
                 </Text>
               </Link>
             </Container>
-            {team.users.totalCount > 0 && (
-              <Table
-                titles={titles}
-                data={team.users}
-                onRemoveModal={() => {
-                  // setRemoveModalOpen(true);
-                  // setRemovableUser(p);
-                }}
-              />
-            )}
             <Container>
               <Text variant="small">
                 {`Équipe créée le ${day(team.createdAt).format('DD/MM/YYYY')}`}
@@ -236,6 +256,17 @@ const Team = (): JSX.Element => {
                 )}`}
               </Text>
             </Container>
+            {team.users.totalCount > 0 && (
+              <Table
+                teamID={team.id}
+                titles={titles}
+                data={team.users}
+                onRemoveModal={(p) => {
+                  setRemoveModalOpen(true);
+                  setRemovableUser(p);
+                }}
+              />
+            )}
           </Container>
         ) : (
           <Container align="center" flex={0}>
@@ -280,17 +311,58 @@ const Team = (): JSX.Element => {
               size="long"
               onClick={() => {
                 router.back();
-                addCompanyUserToTeam({
-                  variables: {
-                    id: team?.id as string,
-                    userID: userToAdd?.id as string,
-                  },
-                });
+                addCompanyUserToTeam();
                 setAddModalOpen(false);
               }}
             >
               Ajouter
             </Button>
+          </Container>
+        </Modal>
+      )}
+      {isRemoveModalOpen && (
+        <Modal
+          size="small"
+          title="Retirer le membre ?"
+          onClose={() => {
+            setRemovableUser(undefined);
+            setRemoveModalOpen(false);
+            router.back();
+          }}
+        >
+          <Container>
+            <Container>
+              <Text align="center" variant="small">
+                Vous êtes sur le point de retirer le membre :
+              </Text>
+              <Container>
+                <Text bold align="center" variant="small">
+                  {removableUser?.firstname && removableUser.lastname
+                    ? `${removableUser.firstname} ${removableUser.lastname}`
+                    : removableUser?.email}
+                </Text>
+              </Container>
+            </Container>
+            <Container row>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setRemovableUser(undefined);
+                  setRemoveModalOpen(false);
+                  router.back();
+                }}
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={() => {
+                  removeCompanyUserFromTeam();
+                  setRemoveModalOpen(false);
+                }}
+              >
+                Confirmer
+              </Button>
+            </Container>
           </Container>
         </Modal>
       )}

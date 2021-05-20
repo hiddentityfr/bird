@@ -29,3 +29,4 @@ export type DeleteTeamVars = Node;
 export type DeleteTeamResponse = { deleteTeam: boolean };
 
 export type AddCompanyUserToTeamVars = Node & { userID: string };
+export type RemoveCompanyUserFromTeamVars = AddCompanyUserToTeamVars;
