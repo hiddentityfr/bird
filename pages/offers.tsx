@@ -834,7 +834,7 @@ const Offers = (): JSX.Element => {
             <Autocomplete
               thickness="large"
               size="long"
-              placeholder="Compétences 1"
+              placeholder="Compétence 1"
               options={competencies
                 .filter(
                   (e) => !newOffer?.primaryCompetencies?.find((p) => p === e)
@@ -853,7 +853,7 @@ const Offers = (): JSX.Element => {
             <Autocomplete
               thickness="large"
               size="long"
-              placeholder="Compétences 2"
+              placeholder="Compétence 2"
               options={competencies
                 .filter(
                   (e) => !newOffer?.primaryCompetencies?.find((p) => p === e)
@@ -872,7 +872,7 @@ const Offers = (): JSX.Element => {
             <Autocomplete
               thickness="large"
               size="long"
-              placeholder="Compétences 3"
+              placeholder="Compétence 3"
               options={competencies
                 .filter(
                   (e) => !newOffer?.primaryCompetencies?.find((p) => p === e)
