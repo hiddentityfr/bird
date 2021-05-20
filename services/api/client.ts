@@ -23,7 +23,7 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
   defaultOptions: {
-    watchQuery: { fetchPolicy: 'cache-and-network' },
+    watchQuery: { fetchPolicy: 'network-only' },
   },
 });
 
