@@ -16,7 +16,7 @@ const Sidebar = (): JSX.Element => {
     () => [
       { name: 'Accueil', route: '/home' },
       { name: 'Candidats', route: '/candidates' },
-      { name: 'Offres', route: '/jobs' },
+      { name: 'Offres', route: '/offers' },
       { name: 'Administration', route: '/admin' },
     ],
     []

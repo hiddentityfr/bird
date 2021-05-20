@@ -1,25 +1,37 @@
 import React from 'react';
 
-import { MapPin } from 'react-feather';
-import Container from '@components/Layouts/Container';
-import Text from '@components/DataDisplay/Text';
+import { day } from '@utils';
 
+import { IOffer, contractMapping } from '@typings/Offer';
 
-const RoundCard = ({title}: any) => {
+import { Container, Spacer } from '@components/Layouts';
+import { Text } from '@components/DataDisplay';
+
+interface Props {
+  offer: IOffer;
+}
+
+const RoundCard = ({ offer }: Props): JSX.Element => {
   return (
-    <Container gap={0} flex="0 30%">
-      <Container bg='#f2f2f5' gap={2} rounded={true}>
+    <Container gap={0}>
+      <Container bg="#f2f2f5" rounded>
         <Container>
-          <Container gap={1} flex={2}><Text variant="h6">{title}</Text></Container>
-            <Container row gap={1} flex={2}>
-            <MapPin color="#4f4f4f" size={14} />
-            <Text variant="small" color="#4f4f4f">Bordeaux</Text>
+          <Container gap={1} flex={2}>
+            <Text variant="h6">{offer.name}</Text>
           </Container>
           <Container row justify="space-between" gap={1} flex={3}>
-            <Text variant="small" color="#bdbdbd">13/03/2020</Text>
-            <Container row justify="space-around" gap={0} flex="0 30%">
-              <Container bg="#ffc9ad" gap={0} rounded={true} flex="75% 50%"><Container bg="ffc9ad" gap={1}><Text variant="small">CDD</Text></Container></Container>
-              <Container bg="#e4c1f9" gap={0} rounded={true} flex="75% 50%"><Container bg="#e4c1f9" gap={1}><Text variant="small">CDI</Text></Container></Container>
+            <Text variant="small" color="#bdbdbd">
+              {day(offer.createdAt).format('DD/MM/YYYY')}
+            </Text>
+            <Spacer />
+            <Container row justify="space-around">
+              {offer.contractTypes.map((e) => (
+                <Container bg={contractMapping[e].color} rounded>
+                  <Container gap={1}>
+                    <Text variant="small">{contractMapping[e].label}</Text>
+                  </Container>
+                </Container>
+              ))}
             </Container>
           </Container>
         </Container>

@@ -54,6 +54,15 @@ export const queries = {
         }
         offers {
           totalCount
+          edges {
+            node {
+              id
+              name
+              description
+              createdAt
+              contractTypes
+            }
+          }
         }
       }
     }
