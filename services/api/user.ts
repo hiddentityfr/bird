@@ -23,6 +23,7 @@ export const mutations = {
     mutation login($input: LoginArgs!) {
       login(input: $input) {
         token
+        refreshToken
       }
     }
   `,
