@@ -43,13 +43,14 @@ const Login = (): JSX.Element => {
             localStorage.setItem("refreshToken", data.login.refreshToken);
             Router.push("/"); // Merge to get Homepage
         },
-        onError: error => {
+        onError: () => {
+            
             setErrorMsg("Les identifiants sont incorrects")
             setBadUser(true);
         }
     });
     const logger = () => {
-        login({variables: {input: { email: email!, password: password! }}});
+        login({variables: {input: { email: email as string, password: password as string}}});
     }
     if (localStorage.getItem("token") !== undefined) {
         Router.push("/");
