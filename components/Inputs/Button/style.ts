@@ -28,6 +28,7 @@ const color = {
       primary: theme.cvar('colorButtonTextSecondary'),
       secondary: theme.cvar('colorButtonTextSecondary'),
       disabled: theme.cvar('colorButtonTextDisabled'),
+      teal: theme.cvar('colorButtonTextPrimary'),
     },
     background: {
       primary: theme.cvar('colorButtonBgSecondary'),
