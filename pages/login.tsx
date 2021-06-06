@@ -62,7 +62,7 @@ const Login = (): JSX.Element => {
     return (
         <Container align="center" gap={0}>
             <Container row align="center">
-                <img width={50} height={50} src="/images/logo-color.png" alt="hiddentity logo" className="hiddentity-logo" />
+                <Logo />
                 <Text variant="h3" color={theme.cvar('colorForeground')}>Hiddentity</Text>
             </Container>
             <Container gap={0}>
