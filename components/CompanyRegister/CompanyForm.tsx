@@ -76,6 +76,9 @@ const CompanyForm = (): JSX.Element => {
             setCompanySize(e);
     };
 
+    if (step == 4) {
+        console.log(companyName, companySize, siretNumber, mainName, mainSurname, email, password);
+    }
 
     return(
         <Container row gap={0} align="stretch">
