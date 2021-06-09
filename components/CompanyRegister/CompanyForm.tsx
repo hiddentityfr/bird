@@ -11,20 +11,44 @@ import { useMutation } from '@apollo/client';
 import { api } from '@services';
 import { render } from 'react-dom';
 
+type CompanyResponse = {
+    login: {
+        token: string;
+        refreshToken: string;
+    }
+}
+type CompanyVars = {
+    input: {
+        name: string;
+        siret: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        password: string;
+        members: MembersVars[];
+    }
+}
+type MembersVars = {
+    lastname: string;
+    firstname: string;
+    email: string;
+}
 
 const CompanyForm = (): JSX.Element => {
     const [step, setStep] = React.useState(0);
     const [member, setMember] = React.useState(1);
 
     const [email, setEmail] = React.useState<string>();
-    const [mainName, setMainName] = React.useState<string>();
-    const [mainSurname, setMainSurname] = React.useState<string>();
+    const [firstname, setFirstname] = React.useState<string>();
+    const [lastname, setLastname] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
     const [passwordConfirm, setPasswordConfirm] = React.useState<string>();
     const [companyName, setCompanyName] = React.useState<string>();
     const [siretNumber, setSiretNumber] = React.useState<string>();
     const [companySize, setCompanySize] = React.useState(0);
+    const [membersData, setMembersData] = React.useState<MembersVars[]>();
 
+    
 
     const nextStep = () => {
         const currentStep = step;
@@ -35,11 +59,11 @@ const CompanyForm = (): JSX.Element => {
         setStep(currentStep - 1);
         console.log("prev: " + step);
     };
-    const addMember = () => {
+    const addMember = () => () => {
         const currentMember = member;
         setMember(currentMember + 1);
     };
-    const minusMember = () => {
+    const minusMember = () => () => {
         const currentMember = member;
         setMember(currentMember - 1);
     };
@@ -47,13 +71,13 @@ const CompanyForm = (): JSX.Element => {
         if (e != null) 
             setEmail(e);
     };
-    const handleMainName = (e: string) => { 
+    const handleFirstname = (e: string) => { 
         if (e != null) 
-            setMainName(e);
+            setFirstname(e);
     };
-    const handleMainSurname = (e: string) => { 
+    const handleLastname = (e: string) => { 
         if (e != null) 
-            setMainSurname(e);
+            setLastname(e);
     };
     const handlePassword = (e: string) => {
         if (e != null)
@@ -63,6 +87,13 @@ const CompanyForm = (): JSX.Element => {
         if (e != null)
             setPasswordConfirm(e);
     };
+
+    const checkPassword = () => {
+        if (password === passwordConfirm)
+            return true;
+        return false;
+    }
+
     const handleCompanyName = (e: string) => {
         if (e != null)
             setCompanyName(e);
@@ -76,8 +107,37 @@ const CompanyForm = (): JSX.Element => {
             setCompanySize(e);
     };
 
+    const [sendCompanyRegister] = useMutation<CompanyResponse, CompanyVars>(api.company.mutations.createCompany, {
+        onCompleted: data => {
+            console.log(data);
+            // Router.push("/"); // Merge to get Homepage
+        },
+        onError: e => {
+            console.log(e);
+        }
+    });
+
+    const createCompany = () => {
+        sendCompanyRegister(
+            { variables: 
+                { input: 
+                    { 
+                        name: companyName as string,
+                        siret: siretNumber as string,
+                        firstname: firstname as string,
+                        lastname: lastname as string,
+                        email: email as string, 
+                        password: password as string,
+                        members: membersData ?? []
+                    }
+                }
+            }
+        );
+    };
+
     if (step == 4) {
-        console.log(companyName, companySize, siretNumber, mainName, mainSurname, email, password);
+        console.log(companyName, companySize, siretNumber, firstname, lastname, email, password);
+        createCompany();
     }
 
     return(
@@ -152,11 +212,11 @@ const CompanyForm = (): JSX.Element => {
                         <Container row flex={0}>
                             <Container>
                                 <Text variant="h5" align="left">Prénom</Text>
-                                <TextField size="long" thickness="large" onChange={(e) => {handleMainName(e)}} type="text" placeholder="Pierre"></TextField>
+                                <TextField size="long" thickness="large" onChange={(e) => {handleFirstname(e)}} type="text" placeholder="Pierre"></TextField>
                             </Container>
                             <Container>
                                 <Text variant="h5" align="left">Nom</Text>
-                                <TextField size="long" thickness="large" onChange={(e) => {handleMainSurname(e)}} type="text" placeholder="Dupont"></TextField>
+                                <TextField size="long" thickness="large" onChange={(e) => {handleLastname(e)}} type="text" placeholder="Dupont"></TextField>
                             </Container>
                         </Container>
                         <Container row flex={0}>
@@ -204,7 +264,7 @@ const CompanyForm = (): JSX.Element => {
                             </Container>
                         </Container>
                         <Container>
-                            <Button size="short" variant="teal" thickness="large" onClick={nextStep}>Ajouter un membre</Button>
+                            <Button size="short" variant="teal" thickness="large" onClick={addMember()}>Ajouter un membre</Button>
                         </Container>
                     </Container> }
                 </Container>
