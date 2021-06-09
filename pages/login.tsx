@@ -4,6 +4,7 @@ import Router  from 'next/router';
 import Container from '@components/Layouts/Container';
 import Text from '@components/DataDisplay/Text';
 import { TextField, Button } from '@components/Inputs';
+import { Logo } from '@components/Medias/Icons';
 import { theme } from '@utils';
 
 import { useMutation } from '@apollo/client';
@@ -44,15 +45,14 @@ const Login = (): JSX.Element => {
             Router.push("/"); // Merge to get Homepage
         },
         onError: () => {
-            
             setErrorMsg("Les identifiants sont incorrects")
             setBadUser(true);
         }
     });
-    const logger = () => {
-        login({variables: {input: { email: email as string, password: password as string}}});
-    }
-    if (localStorage.getItem("token") !== undefined) {
+    const logger = () => () => {
+        login({ variables: { input: { email: email as string, password: password as string} } });
+    };
+    if (localStorage.getItem("token")) {
         Router.push("/");
         // return (
             // <Container align="center" gap={0}>You are logged in.</Container>
@@ -66,14 +66,12 @@ const Login = (): JSX.Element => {
                 <Text variant="h3" color={theme.cvar('colorForeground')}>Hiddentity</Text>
             </Container>
             <Container gap={0}>
-                <form onSubmit={e => {e.preventDefault(); logger() }} key="form">
-                    <Text variant="h5" align="left">Adresse mail</Text>
-                    <TextField size="long" thickness="large" error={badUser}onChange={(e) => {handleEmail(e)}} type="text" placeholder="pierre.dupont@example.com" />
-                    <Text variant="h5" align="left">Mot de passe</Text>
-                    <TextField size="long" thickness="large" error={badUser} onChange={(e) => {handlePassword(e)}} type="password" placeholder="********" />
-                    <Button size="long" variant="teal" thickness="large">Login</Button>
-                </form>
-            {badUser && <Text variant="h5" align="left" color={theme.cvar('colorSelectTextError')}>{errorMsg}</Text> }
+                <Text variant="h5" align="left">Adresse mail</Text>
+                <TextField size="long" thickness="large" error={badUser as boolean} onChange={(e) => {handleEmail(e)}} type="text" placeholder="pierre.dupont@example.com" />
+                <Text variant="h5" align="left">Mot de passe</Text>
+                <TextField size="long" thickness="large" error={badUser as boolean} onChange={(e) => {handlePassword(e)}} type="password" placeholder="********" />
+                <Button size="long" variant="teal" thickness="large" onClick={ logger() }>Login</Button>
+                { badUser && <Text variant="h5" align="left" color={theme.cvar('colorSelectTextError')}>{errorMsg}</Text> }
             </Container>
         </Container>
     );
