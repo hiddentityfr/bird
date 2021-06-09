@@ -11,7 +11,7 @@ import { useMutation } from '@apollo/client';
 import { api } from '@services';
 
 type LoginResponse = {
-    login: {
+    companyLogin: {
         token: string;
         refreshToken: string;
     }
@@ -37,11 +37,11 @@ const Login = (): JSX.Element => {
         if (e != null)
             setPassword(e)
     }
-    const [login] = useMutation<LoginResponse, LoginVars>(api.user.mutations.login, {
+    const [login] = useMutation<LoginResponse, LoginVars>(api.user.mutations.companyLogin, {
         onCompleted: data => {
             // console.log(data.login.token);
-            localStorage.setItem("token", data.login.token);
-            localStorage.setItem("refreshToken", data.login.refreshToken);
+            localStorage.setItem("token", data.companyLogin.token);
+            localStorage.setItem("refreshToken", data.companyLogin.refreshToken);
             Router.push("/"); // Merge to get Homepage
         },
         onError: () => {
