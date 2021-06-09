@@ -19,9 +19,9 @@ export const queries = {
 };
 
 export const mutations = {
-  login: gql`
-    mutation login($input: LoginArgs!) {
-      login(input: $input) {
+  companyLogin: gql`
+    mutation companyLogin($input: CompanyLoginArgs!) {
+      companyLogin(input: $input) {
         token
         refreshToken
       }
