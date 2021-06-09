@@ -17,11 +17,11 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-    defaultOptions: {
-      watchQuery: { fetchPolicy: 'network-only' },
-    },
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+  defaultOptions: {
+    watchQuery: { fetchPolicy: 'network-only' },
+  },
 });
 
 export default client;
