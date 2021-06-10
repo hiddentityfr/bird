@@ -45,7 +45,7 @@ const color = {
   },
 };
 
-export type ButtonVariant = 'primary' | 'secondary' | 'teal';
+export type ButtonVariant = 'primary' | 'secondary' | 'teal';
 
 export interface StyledButtonProps {
   variant: ButtonVariant | 'disabled';
