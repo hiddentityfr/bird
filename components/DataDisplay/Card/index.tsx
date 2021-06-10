@@ -5,6 +5,9 @@ import { theme } from '@utils';
 import { Container, Spacer } from '@components/Layouts';
 import { Text } from '@components/DataDisplay';
 
+export { default as OfferCard } from './offer';
+export { default as MatchCard } from './match';
+
 interface CardProps {
   number: string;
   label: string;
