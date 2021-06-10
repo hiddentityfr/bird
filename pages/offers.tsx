@@ -14,9 +14,8 @@ import {
 } from '@typings/Offer';
 
 import { Container } from '@components/Layouts';
-import { Link, Text } from '@components/DataDisplay';
+import { Link, Text, OfferCard } from '@components/DataDisplay';
 import { Autocomplete, Button, Select, TextField } from '@components/Inputs';
-import RoundCard from '@components/Utils/RoundCard';
 import { Modal } from '@components/Overlays';
 
 import { AuthActions, useAuth } from '@contexts/AuthContext';
@@ -802,7 +801,7 @@ const Offers = (): JSX.Element => {
         <Container gap={0} align="flex-start">
           <Container row align="stretch">
             {company?.offers?.edges?.map((e) => (
-              <RoundCard key={e.node.id} offer={e.node} />
+              <OfferCard key={e.node.id} offer={e.node} />
             ))}
           </Container>
         </Container>

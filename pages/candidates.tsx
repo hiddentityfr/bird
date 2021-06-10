@@ -2,10 +2,9 @@ import React from 'react';
 
 import { MoreHorizontal } from 'react-feather';
 
-import Container from '@components/Layouts/Container';
-import Text from '@components/DataDisplay/Text';
-import TextField from '@components/Inputs/TextField';
-import MatchCard from '@components/DataDisplay/MatchCard';
+import { Container } from '@components/Layouts';
+import { Text, MatchCard } from '@components/DataDisplay';
+import { TextField } from '@components/Inputs';
 
 // import { useAuth } from '@contexts/AuthContext';
 

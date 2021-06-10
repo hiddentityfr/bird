@@ -11,7 +11,7 @@ interface Props {
   offer: IOffer;
 }
 
-const RoundCard = ({ offer }: Props): JSX.Element => {
+const OfferCard = ({ offer }: Props): JSX.Element => {
   return (
     <Container gap={0}>
       <Container bg="#f2f2f5" rounded>
@@ -40,4 +40,4 @@ const RoundCard = ({ offer }: Props): JSX.Element => {
   );
 };
 
-export default RoundCard;
+export default OfferCard;
