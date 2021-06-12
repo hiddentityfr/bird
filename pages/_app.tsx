@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { ThemeProvider } from 'styled-components';
-import { ApolloProvider, useLazyQuery, useQuery } from '@apollo/client';
+import { ApolloProvider, useLazyQuery } from '@apollo/client';
 
 import { api } from '@services';
 import { useLocalStorage, useMounted } from '@hooks';
