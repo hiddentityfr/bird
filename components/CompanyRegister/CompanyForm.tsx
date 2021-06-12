@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import Container from '@components/Layouts/Container';
 import { TextField, Button } from '@components/Inputs';
@@ -37,7 +37,7 @@ type MembersVars = {
 
 const CompanyForm = (): JSX.Element => {
     const [step, setStep] = React.useState(0);
-    const [member, setMember] = React.useState<boolean>(false);
+    // const [member, setMember] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>();
     const [firstname, setFirstname] = React.useState<string>();
     const [lastname, setLastname] = React.useState<string>();
@@ -56,12 +56,12 @@ const CompanyForm = (): JSX.Element => {
             }
         }
         if (currentStep === 1) {
-            if(!firstname) {
+            if(!firstname || !lastname || !checkPassword(password, passwordConfirm)) {
                 return;
             }
         }
         if (currentStep === 2) {
-            if(!siretNumber) {
+            if(!companyName || !siretNumber || !companySize) {
                 return;
             }
         }
@@ -94,8 +94,8 @@ const CompanyForm = (): JSX.Element => {
             setPasswordConfirm(e);
     };
 
-    const checkPassword = () => {
-        if (password === passwordConfirm)
+    const checkPassword = (pw: string, confirm: string) => {
+        if (pw === confirm)
             return true;
         return false;
     };
@@ -112,9 +112,9 @@ const CompanyForm = (): JSX.Element => {
             setCompanySize(e);
     };
     // temporary
-    const handleAddMember = () => () => {
-        setMember(true);
-    };
+    // const handleAddMember = () => () => {
+    //     setMember(true);
+    // };
     const [sendCompanyRegister] = useMutation<CompanyResponse, CompanyVars>(api.company.mutations.createCompany, {
         onCompleted: data => {
             console.log(data);
@@ -124,6 +124,14 @@ const CompanyForm = (): JSX.Element => {
             console.log(e);
         }
     });
+
+    let COMPONENTS:JSX.Element[] = [];
+    
+    const hTestClick = () => () => {
+        COMPONENTS.push(<AddMember />);
+        console.log(COMPONENTS);
+    }
+
 
     const createCompany = () => {
         sendCompanyRegister(
@@ -230,10 +238,11 @@ const CompanyForm = (): JSX.Element => {
                     { step == 3 && <Container>
                         <Container>
                         <AddMember />
-                        { member && <AddMember /> }
+                        {/* { member && <AddMember /> } */}
+                        { COMPONENTS }
                         <Container row flex={0}>
                             <Container align="flex-end">
-                                <Spacer size="small"/><Button size="short" variant="teal" thickness="large" onClick={handleAddMember()}>+ Ajouter un membre</Button>
+                                <Spacer size="small"/><Button size="short" variant="teal" thickness="large" onClick={hTestClick()}>+ Ajouter un membre</Button>
                             </Container>
                         </Container>
                         </ Container>
