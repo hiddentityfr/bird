@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import Router  from 'next/router';
 
 import Container from '@components/Layouts/Container';
 import { TextField, Button } from '@components/Inputs';
@@ -8,8 +9,6 @@ import { theme } from '@utils';
 
 import { useMutation } from '@apollo/client';
 import { api } from '@services';
-
-import AddMember from './AddMember';
 import Sidebar from './Sidebar';
 
 type CompanyResponse = {
@@ -37,7 +36,6 @@ type MembersVars = {
 
 const CompanyForm = (): JSX.Element => {
     const [step, setStep] = React.useState(0);
-    // const [member, setMember] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>();
     const [firstname, setFirstname] = React.useState<string>();
     const [lastname, setLastname] = React.useState<string>();
@@ -46,7 +44,8 @@ const CompanyForm = (): JSX.Element => {
     const [companyName, setCompanyName] = React.useState<string>();
     const [siretNumber, setSiretNumber] = React.useState<string>();
     const [companySize, setCompanySize] = React.useState(0);
-    const [membersData, setMembersData] = React.useState<MembersVars[]>();
+    const [members, setMembers] = React.useState<MembersVars[]>([]);
+    const onAddMember = () => () => setMembers([...members, {firstname: '', lastname: '', email: ''}]);
 
     const nextStep = () => {
         const currentStep = step;
@@ -111,28 +110,13 @@ const CompanyForm = (): JSX.Element => {
         if (e != null)
             setCompanySize(e);
     };
-    // temporary
-    // const handleAddMember = () => () => {
-    //     setMember(true);
-    // };
     const [sendCompanyRegister] = useMutation<CompanyResponse, CompanyVars>(api.company.mutations.createCompany, {
-        onCompleted: data => {
-            console.log(data);
-            // Router.push("/"); // Merge to get Homepage
+        onCompleted: _ => {
+            // Router.push("/login"); // Merge to login
         },
-        onError: e => {
-            console.log(e);
+        onError: _ => {
         }
     });
-
-    let COMPONENTS:JSX.Element[] = [];
-    
-    const hTestClick = () => () => {
-        COMPONENTS.push(<AddMember />);
-        console.log(COMPONENTS);
-    }
-
-
     const createCompany = () => {
         sendCompanyRegister(
             { variables: 
@@ -144,20 +128,20 @@ const CompanyForm = (): JSX.Element => {
                         lastname: lastname as string,
                         email: email as string, 
                         password: password as string,
-                        members: membersData ?? []
+                        members: members ?? []
                     }
                 }
             }
         );
     };
     if (step == 4) {
-        // console.log(companyName, companySize, siretNumber, firstname, lastname, email, password);
+        console.log(members);
+        console.log(companyName, companySize, siretNumber, firstname, lastname, email, password);
         createCompany();
     }
     return(
         <Container row gap={0} align="stretch">
             <Sidebar step={step} />
-
             <Container bg="#F2F2F5" gap={0} flex={1.8}>
                 <Container align="flex-end">
                         <Text variant="p" bold={false} align="right" color={theme.cvar('colorAccents6')}>Un problème ? <Link href="#"><Text variant="small" bold={true} color={theme.cvar('colorButtonGreen')}>Obtenir de l'aide</Text></Link></Text>             
@@ -189,7 +173,6 @@ const CompanyForm = (): JSX.Element => {
                         </Container>
                     </Container> }
                 </Container>
-                
                 <Container>
                     { step == 0 && <Container flex={0}>
                         <Text weight="bold" variant="h5" color={theme.cvar('colorAccents4')}>Adresse mail</Text>
@@ -237,18 +220,35 @@ const CompanyForm = (): JSX.Element => {
                     </Container> }
                     { step == 3 && <Container>
                         <Container>
-                        <AddMember />
-                        {/* { member && <AddMember /> } */}
-                        { COMPONENTS }
-                        <Container row flex={0}>
-                            <Container align="flex-end">
-                                <Spacer size="small"/><Button size="short" variant="teal" thickness="large" onClick={hTestClick()}>+ Ajouter un membre</Button>
+                            <Container row flex={0} gap={0}>
+                            { members.map((_, i) => (
+                                <Container row gap={0}>
+                                    <Container gap={0} flex={2}>
+                                        <Text variant="h5" align="left">Prénom</Text>
+                                        <TextField size="short" thickness="large" onChange={(e) => setMembers([...members.slice(0, i), { ...members[i], firstname: e }, ...members.slice(i + 1),])} type="text" placeholder="Pierre" />
+                                    </Container>
+                                    <Container gap={0} flex={2}>
+                                        <Text variant="h5" align="left">Nom de famille</Text>
+                                        <TextField size="short" thickness="large" onChange={(e) => setMembers([...members.slice(0, i), { ...members[i], lastname: e }, ...members.slice(i + 1),])} type="text" placeholder="Dupont" />
+                                    </Container>
+                                    <Container gap={0} flex={3}>
+                                        <Text variant="h5" align="left">Adresse Email</Text>
+                                        <TextField size="long" thickness="large" onChange={(e) => setMembers([...members.slice(0, i), { ...members[i], email: e }, ...members.slice(i + 1),])} type="text" placeholder="pierre.dupont@example.com" />
+                                    </Container>
+                                    <Container row flex={1}>
+                                        <Spacer size="large" />
+                                        <Button size="short" variant="primary" thickness="large" onClick={() => setMembers([...members.slice(0, i), ...members.slice(i + 1),])}>Supprimer</Button>
+                                    </Container>
+                                </Container>))}
                             </Container>
-                        </Container>
+                            <Container row flex={0}>
+                                <Container align="flex-start">
+                                    <Spacer size="small"/><Button size="short" variant="teal" thickness="large" onClick={onAddMember()}>+ Ajouter un membre</Button>
+                                </Container>
+                            </Container>
                         </ Container>
                     </Container> }
                 </Container>
-
                 <Container row gap={8}>
                         { step !== 0 && step !== 4 && <Container align="flex-start"><Button size="long" variant="secondary" thickness="large" onClick={prevStep}>ÉTAPE PRÉCEDÉNTE</Button></Container> }
                         { step !== 4 && <Container align="flex-end"><Button size="long" variant="teal" thickness="large" onClick={nextStep}>SUIVANT</Button></Container> }
