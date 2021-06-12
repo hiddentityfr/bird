@@ -1,5 +1,4 @@
 import React from 'react';
-import Router  from 'next/router';
 
 import Container from '@components/Layouts/Container';
 import { TextField, Button } from '@components/Inputs';
@@ -9,7 +8,9 @@ import { theme } from '@utils';
 
 import { useMutation } from '@apollo/client';
 import { api } from '@services';
-import { render } from 'react-dom';
+
+import AddMember from './AddMember';
+import Sidebar from './Sidebar';
 
 type CompanyResponse = {
     login: {
@@ -36,8 +37,7 @@ type MembersVars = {
 
 const CompanyForm = (): JSX.Element => {
     const [step, setStep] = React.useState(0);
-    const [member, setMember] = React.useState(1);
-
+    const [member, setMember] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>();
     const [firstname, setFirstname] = React.useState<string>();
     const [lastname, setLastname] = React.useState<string>();
@@ -48,25 +48,31 @@ const CompanyForm = (): JSX.Element => {
     const [companySize, setCompanySize] = React.useState(0);
     const [membersData, setMembersData] = React.useState<MembersVars[]>();
 
-    
-
     const nextStep = () => {
         const currentStep = step;
+        if (currentStep === 0) {
+            if(!email) {
+                return;
+            }
+        }
+        if (currentStep === 1) {
+            if(!firstname) {
+                return;
+            }
+        }
+        if (currentStep === 2) {
+            if(!siretNumber) {
+                return;
+            }
+        }
         setStep(currentStep + 1);
     };
+
     const prevStep = () => {
         const currentStep = step;
         setStep(currentStep - 1);
-        console.log("prev: " + step);
     };
-    const addMember = () => () => {
-        const currentMember = member;
-        setMember(currentMember + 1);
-    };
-    const minusMember = () => () => {
-        const currentMember = member;
-        setMember(currentMember - 1);
-    };
+
     const handleEmail = (e: string) => { 
         if (e != null) 
             setEmail(e);
@@ -92,8 +98,7 @@ const CompanyForm = (): JSX.Element => {
         if (password === passwordConfirm)
             return true;
         return false;
-    }
-
+    };
     const handleCompanyName = (e: string) => {
         if (e != null)
             setCompanyName(e);
@@ -106,7 +111,10 @@ const CompanyForm = (): JSX.Element => {
         if (e != null)
             setCompanySize(e);
     };
-
+    // temporary
+    const handleAddMember = () => () => {
+        setMember(true);
+    };
     const [sendCompanyRegister] = useMutation<CompanyResponse, CompanyVars>(api.company.mutations.createCompany, {
         onCompleted: data => {
             console.log(data);
@@ -134,42 +142,13 @@ const CompanyForm = (): JSX.Element => {
             }
         );
     };
-
     if (step == 4) {
-        console.log(companyName, companySize, siretNumber, firstname, lastname, email, password);
+        // console.log(companyName, companySize, siretNumber, firstname, lastname, email, password);
         createCompany();
     }
-
     return(
         <Container row gap={0} align="stretch">
-            <Container align="center" flex={0.55} gap={0}>
-                <Container row>
-                    <img src="/images/logo-color.png" width={50} height={50} alt="hiddentity logo" className="hiddentity-logo" />
-                    <Text variant="h3" color={"#000000"}>Hiddentity</Text>
-                </Container>
-                { step == 0 && <Container align="flex-start">
-                    <Text variant="h4" color="#bdbdbd">Type d'entreprise</Text>
-                    <Text variant="h4" color="#bdbdbd">Détails de l'entreprise</Text>
-                    <Text variant="h4" color="#bdbdbd">Équipe</Text>
-                </Container> }
-                { step == 1 && <Container align="flex-start">
-                    <Text variant="h4" color={theme.cvar('colorButtonGreen')}>Vos informations</Text>
-                    <Text variant="h4" color="#bdbdbd">Détails de l'entreprise</Text>
-                    <Text variant="h4" color="#bdbdbd">Équipe</Text>
-                </Container> }
-                { step == 2 && <Container align="flex-start">
-                    <Text variant="h4" color="#bdbdbd">Vos informations</Text>
-                    <Text variant="h4" color={theme.cvar('colorButtonGreen')}>Détails de l'entreprise</Text>
-                    <Text variant="h6" color={theme.cvar('colorAccents1')}>Informations</Text>
-                    <Text variant="h6" color="#bdbdbd">Localisations</Text>
-                    <Text variant="h4" color="#bdbdbd">Équipe</Text>
-                </Container> }
-                { step == 3 && <Container align="flex-start">
-                    <Text variant="h4" color="#bdbdbd">Vos informations</Text>
-                    <Text variant="h4" color="#bdbdbd">Détails de l'entreprise</Text>
-                    <Text variant="h4" color={theme.cvar('colorButtonGreen')}>Équipe</Text>
-                </Container> }
-            </Container>
+            <Sidebar step={step} />
 
             <Container bg="#F2F2F5" gap={0} flex={1.8}>
                 <Container align="flex-end">
@@ -210,17 +189,17 @@ const CompanyForm = (): JSX.Element => {
                     </Container> }
                     { step == 1 && <Container>
                         <Container row flex={0}>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Prénom</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handleFirstname(e)}} type="text" placeholder="Pierre"></TextField>
                             </Container>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Nom</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handleLastname(e)}} type="text" placeholder="Dupont"></TextField>
                             </Container>
                         </Container>
                         <Container row flex={0}>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Mot de passe</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handlePassword(e)}} type="password" placeholder="********"></TextField>
                             </Container>
@@ -232,50 +211,38 @@ const CompanyForm = (): JSX.Element => {
                     </Container> }
                     { step == 2 && <Container>
                         <Container row flex={0}>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Nom de l'entreprise</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handleCompanyName(e)}} type="text" placeholder="Epitech"></TextField>
                             </Container>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Numéro SIRET</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handleSiretNumber(e)}} type="text" placeholder="123 568 941 00056"></TextField>
                             </Container>
                         </Container>
                         <Container row flex={0}>
-                            <Container>
+                            <Container gap={0}>
                                 <Text variant="h5" align="left">Taille</Text>
                                 <TextField size="long" thickness="large" onChange={(e) => {handleCompanySize(e)}} type="number" placeholder="1-10000"></TextField>
                             </Container>
                         </Container>
                     </Container> }
-                    { step == 3 && <Container flex={0} justify="flex-start">
-                        <Container row flex={0}>
-                            <Container>
-                                <Text variant="h5" align="left">Prénom</Text>
-                                <TextField size="short" thickness="large" onChange={() => {}} type="text" placeholder="Pierre"></TextField>
-                            </Container>
-                            <Container>
-                                <Text variant="h5" align="left">Nom de famille</Text>
-                                <TextField size="short" thickness="large" onChange={() => {}} type="text" placeholder="Dupont"></TextField>
-                            </Container>
-                            <Container>
-                                <Text variant="h5" align="left">Adresse Email</Text>
-                                <TextField size="short" thickness="large" onChange={() => {}} type="text" placeholder="pierre.dupont@example.com"></TextField>
-                            </Container>
-                        </Container>
+                    { step == 3 && <Container>
                         <Container>
-                            <Button size="short" variant="teal" thickness="large" onClick={addMember()}>Ajouter un membre</Button>
+                        <AddMember />
+                        { member && <AddMember /> }
+                        <Container row flex={0}>
+                            <Container align="flex-end">
+                                <Spacer size="small"/><Button size="short" variant="teal" thickness="large" onClick={handleAddMember()}>+ Ajouter un membre</Button>
+                            </Container>
                         </Container>
+                        </ Container>
                     </Container> }
                 </Container>
 
-                <Container row justify="space-between">
-                    <Container justify="flex-start" gap={8}>
-                        { step !== 0 && step !== 4 && <Button size="short" variant="secondary" thickness="large" onClick={prevStep}>ÉTAPE PRÉCEDÉNTE</Button> }
-                    </Container>
-                    <Container justify="flex-end" gap={8}>
-                        { step !== 4 && <Button size="short" variant="teal" thickness="large" onClick={nextStep}>SUIVANT</Button> }
-                    </Container>
+                <Container row gap={8}>
+                        { step !== 0 && step !== 4 && <Container align="flex-start"><Button size="long" variant="secondary" thickness="large" onClick={prevStep}>ÉTAPE PRÉCEDÉNTE</Button></Container> }
+                        { step !== 4 && <Container align="flex-end"><Button size="long" variant="teal" thickness="large" onClick={nextStep}>SUIVANT</Button></Container> }
                 </Container>
             </Container>
         </Container>
