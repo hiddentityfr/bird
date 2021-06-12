@@ -1,5 +1,4 @@
 import React from 'react';
-import Router  from 'next/router';
 
 import Container from '@components/Layouts/Container';
 import { TextField, Button } from '@components/Inputs';
@@ -55,7 +54,7 @@ const CompanyForm = (): JSX.Element => {
             }
         }
         if (currentStep === 1) {
-            if(!firstname || !lastname || !checkPassword(password, passwordConfirm)) {
+            if(!firstname || !lastname || !checkPassword(password as string, passwordConfirm as string)) {
                 return;
             }
         }
@@ -214,7 +213,7 @@ const CompanyForm = (): JSX.Element => {
                         <Container row flex={0}>
                             <Container gap={0}>
                                 <Text variant="h5" align="left">Taille</Text>
-                                <TextField size="long" thickness="large" onChange={(e) => {handleCompanySize(e)}} type="number" placeholder="1-10000"></TextField>
+                                <TextField size="long" thickness="large" onChange={(e) => {handleCompanySize(parseInt(e))}} type="number" placeholder="1-10000"></TextField>
                             </Container>
                         </Container>
                     </Container> }
