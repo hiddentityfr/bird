@@ -4,10 +4,10 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { ThemeProvider } from 'styled-components';
-import { ApolloProvider, useQuery } from '@apollo/client';
+import { ApolloProvider, useLazyQuery, useQuery } from '@apollo/client';
 
 import { api } from '@services';
-import { useMounted } from '@hooks';
+import { useLocalStorage, useMounted } from '@hooks';
 import { CompanyResponse } from '@typings/Company';
 
 import { Container } from '@components/Layouts';
@@ -23,22 +23,44 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   const mounted = useMounted();
   const router = useRouter();
   const [{ company }, dispatch] = useAuth();
+  const [token, setToken] = useLocalStorage<string | null>('token', null);
 
-  useQuery<CompanyResponse>(api.company.queries.company, {
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      dispatch({
-        type: AuthActions.UPDATE_COMPANY,
-        props: { company: data.company },
-      });
-    },
-  });
+  const [appReady, setAppReady] = React.useState(false);
+
+  const [getCompany] = useLazyQuery<CompanyResponse>(
+    api.company.queries.company,
+    {
+      onCompleted: (data) => {
+        dispatch({
+          type: AuthActions.UPDATE_COMPANY,
+          props: { company: data.company },
+        });
+        router.replace('/home').then(() => setAppReady(true));
+      },
+      onError: () => {
+        setToken(null);
+        router.replace('/login').then(() => setAppReady(true));
+      },
+    }
+  );
+
+  React.useEffect(() => {
+    if (!token && !appReady) {
+      router.replace('/login').then(() => setAppReady(true));
+    }
+  }, [appReady, router, token]);
+
+  React.useEffect(() => {
+    if (!company && mounted && token) {
+      getCompany();
+    }
+  }, [company, getCompany, mounted, token]);
 
   if (!mounted) {
     return <></>;
   }
 
-  if (!company) {
+  if (!company && !appReady) {
     return (
       <Container justify="center" align="center">
         <div style={{ transform: 'scale(0.5)' }}>
