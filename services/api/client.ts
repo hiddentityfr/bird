@@ -5,13 +5,17 @@ const httpLink = createHttpLink({
   uri: 'http://api.hiddentity.fr/query',
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, context) => {
   const token = localStorage.getItem('token');
+
+  if (!token) {
+    return context;
+  }
+
   return {
     headers: {
-      ...headers,
-      'Access-Control-Allow-Origin': 'http://localhost:3000/',
-      authorization: token ? `Bearer ${token}` : '',
+      ...context.headers,
+      authorization: `Bearer ${token.replaceAll('"', '')}`,
     },
   };
 });
