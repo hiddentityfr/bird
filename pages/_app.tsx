@@ -45,7 +45,9 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   );
 
   React.useEffect(() => {
-    if (!token && !appReady) {
+    if (router.route === '/register') {
+      setAppReady(true);
+    } else if (!token && !appReady) {
       router.replace('/login').then(() => setAppReady(true));
     }
   }, [appReady, router, token]);
@@ -79,9 +81,11 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
     <ThemeProvider theme={{ mode: 'light' }}>
       <Container gap={0} style={{ minHeight: '100vh' }}>
         <Container row gap={0} align="stretch" noWrap>
-          <Container gap={0} style={{ minWidth: '300px', maxWidth: '350px' }}>
-            <Sidebar />
-          </Container>
+          {!['/login', '/register'].includes(router.route) && (
+            <Container gap={0} style={{ minWidth: '300px', maxWidth: '350px' }}>
+              <Sidebar />
+            </Container>
+          )}
           <Container>
             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />

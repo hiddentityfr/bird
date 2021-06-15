@@ -760,7 +760,13 @@ const Offers = (): JSX.Element => {
     api.offer.mutations.createOffer,
     {
       variables: {
-        input: { ...newOffer, description: 'demo' } as CreateOfferInput,
+        input: {
+          ...newOffer,
+          description: 'demo',
+          primaryCompetencies: newOffer?.primaryCompetencies?.map((e) =>
+            e.toLocaleLowerCase()
+          ),
+        } as CreateOfferInput,
       },
       onCompleted: () => fetchCompany(),
     }
