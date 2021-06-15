@@ -1,5 +1,11 @@
 import * as React from 'react';
-import Router from 'next/router';
+
+import { useRouter } from 'next/router';
+import { useMutation } from '@apollo/client';
+
+import { api } from '@services';
+import { theme } from '@utils';
+import { useLocalStorage } from '@hooks';
 
 import Container from '@components/Layouts/Container';
 import Text from '@components/DataDisplay/Text';
@@ -7,7 +13,7 @@ import { TextField, Button } from '@components/Inputs';
 import { Logo } from '@components/Medias/Icons';
 
 type LoginResponse = {
-  login: {
+  companyLogin: {
     token: string;
     refreshToken: string;
   };
@@ -20,6 +26,9 @@ type LoginVars = {
 };
 
 const Login = (): JSX.Element => {
+  const [, setToken] = useLocalStorage<string | null>('token', null);
+  const router = useRouter();
+
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
   const [badUser, setBadUser] = React.useState<boolean>();
@@ -32,21 +41,11 @@ const Login = (): JSX.Element => {
     if (e != null) setPassword(e);
   };
   const [login] = useMutation<LoginResponse, LoginVars>(
-<<<<<<< HEAD
     api.user.mutations.companyLogin,
     {
       onCompleted: (data) => {
         setToken(data.companyLogin.token);
         router.replace('/');
-=======
-    api.user.mutations.login,
-    {
-      onCompleted: (data) => {
-        // console.log(data.login.token);
-        localStorage.setItem('token', data.login.token);
-        localStorage.setItem('refreshToken', data.login.refreshToken);
-        Router.push('/'); // Merge to get Homepage
->>>>>>> 7b49a6d... Fix lint & optimize Cards components
       },
       onError: () => {
         setErrorMsg('Les identifiants sont incorrects');
@@ -61,17 +60,7 @@ const Login = (): JSX.Element => {
       },
     });
   };
-<<<<<<< HEAD
 
-=======
-  if (localStorage.getItem('token')) {
-    Router.push('/');
-    // return (
-    // <Container align="center" gap={0}>You are logged in.</Container>
-    // redirect to main page, token saved on localstorage, possibility to get a cookie if needed
-    // )
-  }
->>>>>>> 7b49a6d... Fix lint & optimize Cards components
   return (
     <Container align="center" gap={0}>
       <Container row align="center">
