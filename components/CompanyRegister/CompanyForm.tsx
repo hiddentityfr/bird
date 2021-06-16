@@ -176,7 +176,7 @@ const CompanyForm = (): JSX.Element => {
               <Text variant="h4" color={theme.cvar('colorAccents5')}>
                 Créer votre profil entreprise est simple.
                 <br />
-                &nbps;Veuillez entrer votre adresse mail pour continuer.
+                &nbsp;Veuillez entrer votre adresse mail pour continuer.
               </Text>
             </Container>
           )}
@@ -317,7 +317,7 @@ const CompanyForm = (): JSX.Element => {
               <Container row flex={0}>
                 <Container gap={0}>
                   <Text variant="h5" align="left">
-                    Nom de l&nbps;entreprise
+                    Nom de l&nbsp;entreprise
                   </Text>
                   <TextField
                     size="long"
