@@ -12,6 +12,8 @@ import Text from '@components/DataDisplay/Text';
 import { TextField, Button } from '@components/Inputs';
 import { Logo } from '@components/Medias/Icons';
 
+import { AuthActions, useAuth } from '@contexts/AuthContext';
+
 type LoginResponse = {
   companyLogin: {
     token: string;
@@ -26,7 +28,8 @@ type LoginVars = {
 };
 
 const Login = (): JSX.Element => {
-  const [, setToken] = useLocalStorage<string | null>('token', null);
+  const [, dispatch] = useAuth();
+  const [token, setToken] = useLocalStorage<string | null>('token', null);
   const router = useRouter();
 
   const [email, setEmail] = React.useState<string>();
@@ -45,6 +48,10 @@ const Login = (): JSX.Element => {
     {
       onCompleted: (data) => {
         setToken(data.companyLogin.token);
+        dispatch({
+          type: AuthActions.UPDATE_TOKEN,
+          props: { token: data.companyLogin.token },
+        });
         router.replace('/');
       },
       onError: () => {
@@ -60,6 +67,11 @@ const Login = (): JSX.Element => {
       },
     });
   };
+
+  if (token) {
+    router.replace('/');
+    return <></>;
+  }
 
   return (
     <Container align="center" gap={0}>

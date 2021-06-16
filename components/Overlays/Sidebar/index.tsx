@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { useRouter } from 'next/router';
-import { User, Settings } from 'react-feather';
 
 import { theme } from '@utils';
 
@@ -53,34 +52,34 @@ const Sidebar = (): JSX.Element => {
               </Container>
             ))}
           </Container>
-          <Container flex={0} gap={0} justify="center">
-            <Link href="/admin">
-              <Container row>
-                <User color={theme.cvar('colorAccent6')} />
-                <Spacer size={1} />
-                <Text
-                  color={theme.cvar('colorAccent6')}
-                  size="20px"
-                  variant="small"
-                >
-                  Mon compte
-                </Text>
-              </Container>
-            </Link>
-            <Link href="/admin">
-              <Container row>
-                <Settings color={theme.cvar('colorAccent6')} />
-                <Spacer size={1} />
-                <Text
-                  color={theme.cvar('colorAccent6')}
-                  size="20px"
-                  variant="small"
-                >
-                  Paramètres
-                </Text>
-              </Container>
-            </Link>
-          </Container>
+          {/* <Container flex={0} gap={0} justify="center"> */}
+          {/*  <Link href="/admin"> */}
+          {/*    <Container row> */}
+          {/*      <User color={theme.cvar('colorAccent6')} /> */}
+          {/*      <Spacer size={1} /> */}
+          {/*      <Text */}
+          {/*        color={theme.cvar('colorAccent6')} */}
+          {/*        size="20px" */}
+          {/*        variant="small" */}
+          {/*      > */}
+          {/*        Mon compte */}
+          {/*      </Text> */}
+          {/*    </Container> */}
+          {/*  </Link> */}
+          {/*  <Link href="/admin"> */}
+          {/*    <Container row> */}
+          {/*      <Settings color={theme.cvar('colorAccent6')} /> */}
+          {/*      <Spacer size={1} /> */}
+          {/*      <Text */}
+          {/*        color={theme.cvar('colorAccent6')} */}
+          {/*        size="20px" */}
+          {/*        variant="small" */}
+          {/*      > */}
+          {/*         Paramètres */}
+          {/*      </Text> */}
+          {/*    </Container> */}
+          {/*  </Link> */}
+          {/* </Container> */}
         </Container>
       </Container>
     </Container>

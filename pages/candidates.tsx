@@ -10,27 +10,7 @@ import { useQuery } from '@apollo/client';
 import { queries } from '../services/api/match';
 
 const Candidates = (): JSX.Element => {
-  const Waiting = (column: string) => {
-    const { loading, data, error } = useQuery(queries.matches);
-    const res: any[] = [<MatchCard column="empty" />];
-
-    if (loading) return <p>LOADING</p>;
-    if (error) return <p>ERROR</p>;
-    delete res[0];
-    data.matches.edges.map((match: any) => {
-      if (match.node.status === column.column)
-        res.push(
-          <MatchCard
-            name={match.node.offer.name}
-            description=""
-            date="19/08/2020"
-            type="CDI"
-          />
-        );
-      return res;
-    });
-    return res;
-  };
+  const { data } = useQuery(queries.matches);
 
   return (
     <Container row align="stretch" flex={1} gap={0}>
@@ -61,7 +41,21 @@ const Candidates = (): JSX.Element => {
               <Text variant="h4">En attente</Text>
               <MoreHorizontal color="#828282" size={18} />
             </Container>
-            <Waiting column="ACCEPTED" />
+            {/* eslint-disable @typescript-eslint/no-explicit-any */}
+            {data &&
+              data.matches.edges.map((match: any) => {
+                if (match.node.status === 'ACCEPTED') {
+                  return (
+                    <MatchCard
+                      name={match.node.offer.name}
+                      description=""
+                      date="19/08/2020"
+                      type="CDI"
+                    />
+                  );
+                }
+                return <></>;
+              })}
           </Container>
           <Container
             justify="space-between"

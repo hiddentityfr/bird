@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
-export default <T>(key: string, initialValue: T): [T, (value: T) => void] => {
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): [T, (value: T) => void] => {
   const isBrowser = typeof window !== 'undefined';
 
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -32,3 +35,5 @@ export default <T>(key: string, initialValue: T): [T, (value: T) => void] => {
   };
   return [storedValue, setValue];
 };
+
+export default useLocalStorage;

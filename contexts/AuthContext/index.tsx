@@ -4,11 +4,13 @@ import { ICompany } from '@typings/Company';
 
 export enum AuthActions {
   UPDATE_COMPANY = 'update_company',
+  UPDATE_TOKEN = 'update_token',
   RESET = 'reset',
 }
 
 interface ActionProps {
   company: Partial<ICompany>;
+  token: string | null;
 }
 
 interface Action {
@@ -35,6 +37,12 @@ const AuthReducer = (state: State, action: Action): State => {
       return {
         ...state,
         company: action.props?.company ?? state.company,
+      };
+    }
+    case AuthActions.UPDATE_TOKEN: {
+      return {
+        ...state,
+        token: action.props?.token ?? state.token,
       };
     }
     case AuthActions.RESET: {

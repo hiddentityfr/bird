@@ -9,15 +9,27 @@ import { useAuth } from '@contexts/AuthContext';
 import { day, theme } from '@utils';
 import { Spacer } from '@components/Layouts';
 import { Card, Link } from '@components/DataDisplay';
+import Loader from 'react-loader-spinner';
+import { useQuery } from '@apollo/client';
+import { api } from '@services';
 
 const Home = (): JSX.Element => {
   const [{ company }] = useAuth();
+  const [totalMatches, setTotalMatches] = React.useState(0);
 
+  useQuery(api.match.queries.matches, {
+    onCompleted: (data) => {
+      setTotalMatches(data.matches.totalCount);
+    },
+  });
   const cards = React.useMemo(
     () => [
       {
-        number: `0`,
-        label: 'Candidat intéréssé',
+        number: `${totalMatches ?? '-'}`,
+        label:
+          (totalMatches ?? 0) > 1
+            ? 'Candidats intéréssés'
+            : 'Candidat intéréssé',
         icon: <Users color={theme.cvar('colorPurple')} />,
         color: 'rgba(228, 193, 249, 0.15)',
         link: '/home',
@@ -37,8 +49,18 @@ const Home = (): JSX.Element => {
         link: '/home',
       },
     ],
-    []
+    [totalMatches]
   );
+
+  if (!company) {
+    return (
+      <Container justify="flex-start" align="center">
+        <div style={{ transform: 'scale(0.5)' }}>
+          <Loader color="#000" width={100} height={100} type="ThreeDots" />
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container flex={0} title="Accueil">
