@@ -15,7 +15,7 @@ const MatchCard = ({
   description,
   date,
   type,
-}: MatchCardProps): JSX.Element => {
+}: Partial<MatchCardProps>): JSX.Element => {
   return (
     <Container gap={0} flex="0 30%">
       <Container bg="#f2f2f5" gap={2}>

@@ -22,8 +22,8 @@ import Loader from 'react-loader-spinner';
 const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
   const mounted = useMounted();
   const router = useRouter();
-  const [{ company }, dispatch] = useAuth();
-  const [token, setToken] = useLocalStorage<string | null>('token', null);
+  const [{ company, token }, dispatch] = useAuth();
+  const [storedToken] = useLocalStorage<string | null>('token', null);
 
   const [appReady, setAppReady] = React.useState(false);
 
@@ -35,22 +35,30 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
           type: AuthActions.UPDATE_COMPANY,
           props: { company: data.company },
         });
-        router.replace('/home').then(() => setAppReady(true));
+        setAppReady(true);
       },
       onError: () => {
-        setToken(null);
+        dispatch({
+          type: AuthActions.UPDATE_TOKEN,
+          props: { token: null },
+        });
         router.replace('/login').then(() => setAppReady(true));
       },
     }
   );
 
   React.useEffect(() => {
-    if (router.route === '/register') {
+    if (!token && storedToken) {
+      dispatch({
+        type: AuthActions.UPDATE_TOKEN,
+        props: { token: storedToken },
+      });
+    } else if (router.route === '/register') {
       setAppReady(true);
     } else if (!token && !appReady) {
       router.replace('/login').then(() => setAppReady(true));
     }
-  }, [appReady, router, token]);
+  }, [appReady, dispatch, router, storedToken, token]);
 
   React.useEffect(() => {
     if (!company && mounted && token) {
@@ -72,7 +80,7 @@ const AppContent = ({ Component, pageProps }: AppProps): JSX.Element => {
     );
   }
 
-  if (router.route === '/') {
+  if (router.route === '/' && appReady) {
     router.replace('/home');
     return <></>;
   }
