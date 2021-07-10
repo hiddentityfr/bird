@@ -68,6 +68,10 @@ const Login = (): JSX.Element => {
     });
   };
 
+  const goRegister = () => () => {
+    router.replace('/register')
+  }
+
   if (token) {
     router.replace('/');
     return <></>;
@@ -81,7 +85,7 @@ const Login = (): JSX.Element => {
           Hiddentity
         </Text>
       </Container>
-      <Container gap={0}>
+      <Container gap={0} align="flex-start">
         <Text variant="h5" align="left">
           Adresse mail
         </Text>
@@ -110,6 +114,9 @@ const Login = (): JSX.Element => {
         />
         <Button size="long" variant="teal" thickness="large" onClick={logger()}>
           Login
+        </Button>
+        <Button size="long" variant="secondary" thickness="large" onClick={goRegister()}>
+          Register
         </Button>
         {badUser && (
           <Text
