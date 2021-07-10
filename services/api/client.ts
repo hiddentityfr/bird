@@ -2,7 +2,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri: 'http://api.hiddentity.fr/query',
+  uri: 'https://hazel.hiddentity.fr/query', // DEV uri :  https://hazel.herokuapp.com/query | PROD uri : https://hazel.hiddentity.fr/query
 });
 
 const authLink = setContext((_, context) => {

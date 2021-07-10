@@ -74,7 +74,7 @@ const Home = (): JSX.Element => {
                 day().format('dddd').slice(1)}
             </Text>
             <Text variant="p" color="#bdbdbd">
-              ,&nbsp;
+              &nbsp;,
               {day().format('DD MMMM YYYY')}
             </Text>
           </Container>
