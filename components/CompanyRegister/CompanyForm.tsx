@@ -159,7 +159,7 @@ const CompanyForm = (): JSX.Element => {
             align="right"
             color={theme.cvar('colorAccents6')}
           >
-            Un problème ? 
+            Un problème ?
             <Link href="#help">
               <Text variant="small" bold color={theme.cvar('colorButtonGreen')}>
                 &nbsp;Obtenir de l&apos;aide

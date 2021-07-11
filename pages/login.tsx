@@ -69,8 +69,8 @@ const Login = (): JSX.Element => {
   };
 
   const goRegister = () => () => {
-    router.replace('/register')
-  }
+    router.replace('/register');
+  };
 
   if (token) {
     router.replace('/');
@@ -79,45 +79,62 @@ const Login = (): JSX.Element => {
 
   return (
     <Container align="center" gap={0}>
-      <Container row align="center">
+      <Container row align="center" justify="flex-start" flex={1}>
         <Logo />
         <Text variant="h3" color={theme.cvar('colorForeground')}>
           Hiddentity
         </Text>
       </Container>
-      <Container gap={0} align="flex-start">
-        <Text variant="h5" align="left">
-          Adresse mail
-        </Text>
-        <TextField
-          size="long"
-          thickness="large"
-          error={badUser as boolean}
-          onChange={(e) => {
-            handleEmail(e);
-          }}
-          type="text"
-          placeholder="pierre.dupont@example.com"
-        />
-        <Text variant="h5" align="left">
-          Mot de passe
-        </Text>
-        <TextField
-          size="long"
-          thickness="large"
-          error={badUser as boolean}
-          onChange={(e) => {
-            handlePassword(e);
-          }}
-          type="password"
-          placeholder="********"
-        />
-        <Button size="long" variant="teal" thickness="large" onClick={logger()}>
-          Login
-        </Button>
-        <Button size="long" variant="secondary" thickness="large" onClick={goRegister()}>
-          Register
-        </Button>
+      <Container gap={0} align="flex-start" justify="flex-start" flex={3}>
+        <Container gap={3} align="flex-start" justify="flex-start" flex={1}>
+          <Text variant="h5" align="left">
+            Adresse mail
+          </Text>
+          <TextField
+            size="long"
+            thickness="large"
+            error={badUser as boolean}
+            onChange={(e) => {
+              handleEmail(e);
+            }}
+            type="text"
+            placeholder="pierre.dupont@example.com"
+          />
+        </Container>
+        <Container gap={3} justify="flex-start" flex={1}>
+          <Text variant="h5" align="left">
+            Mot de passe
+          </Text>
+          <TextField
+            size="long"
+            thickness="large"
+            error={badUser as boolean}
+            onChange={(e) => {
+              handlePassword(e);
+            }}
+            type="password"
+            placeholder="********"
+          />
+        </Container>
+        <Container align="center" justify="center" gap={0} flex={1}>
+          <Button
+            size="long"
+            variant="teal"
+            thickness="large"
+            onClick={logger()}
+          >
+            Login
+          </Button>
+          <Button
+            size="long"
+            variant="secondary"
+            thickness="large"
+            onClick={goRegister()}
+          >
+            Register
+          </Button>
+        </Container>
+        <Container flex={4}>{}</Container>
         {badUser && (
           <Text
             variant="h5"

@@ -6,13 +6,12 @@ import { Text } from '@components/DataDisplay';
 import { theme } from '@utils';
 import { Button } from '@components/Inputs';
 
-
 const Sidebar = ({ step }: { step: number }): JSX.Element => {
   const router = useRouter();
 
   const goLogin = () => () => {
-    router.replace('/login')
-  }
+    router.replace('/login');
+  };
 
   return (
     <Container align="center" flex={0.55} gap={0}>
@@ -80,7 +79,12 @@ const Sidebar = ({ step }: { step: number }): JSX.Element => {
           </Text>
         </Container>
       )}
-      <Button size="long" variant="secondary" thickness="large" onClick={goLogin()}>
+      <Button
+        size="long"
+        variant="secondary"
+        thickness="large"
+        onClick={goLogin()}
+      >
         Login
       </Button>
     </Container>

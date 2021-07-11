@@ -7,11 +7,7 @@ interface InlineCodeProps {
 }
 
 const InlineCode = ({ children }: InlineCodeProps): JSX.Element => {
-  return (
-    <StyledInlineCode>
-      `{children}`
-    </StyledInlineCode>
-  );
+  return <StyledInlineCode>{children}</StyledInlineCode>;
 };
 
 export default InlineCode;
