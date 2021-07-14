@@ -7,8 +7,10 @@ import { theme } from '@utils';
 import { Container, Spacer } from '@components/Layouts';
 import { Logo } from '@components/Medias/Icons';
 import { Link, Text } from '@components/DataDisplay';
+import { Button } from '@components/Inputs';
 
 const Sidebar = (): JSX.Element => {
+  const router = useRouter();
   const { route } = useRouter();
 
   const nav = React.useMemo(
@@ -21,6 +23,11 @@ const Sidebar = (): JSX.Element => {
     []
   );
 
+  const goLogin = () => () => {
+    localStorage.clear();
+    router.replace('/login');
+  };
+
   return (
     <Container align="stretch" row gap={0} bg={theme.cvar('colorGrey')}>
       <Container align="center">
@@ -32,7 +39,7 @@ const Sidebar = (): JSX.Element => {
               hiddentity
             </Text>
           </Container>
-          <Container gap={0} justify="center">
+          <Container gap={8} justify="center" flex={6}>
             {nav.map((e) => (
               <Container flex={0} key={e.route}>
                 <Link key={e.name} href={e.route}>
@@ -51,6 +58,16 @@ const Sidebar = (): JSX.Element => {
                 </Link>
               </Container>
             ))}
+          </Container>
+          <Container gap={0} justify="center" flex={1}>
+            <Button
+              size="long"
+              variant="teal"
+              thickness="large"
+              onClick={goLogin()}
+            >
+              Se déconnecter
+            </Button>
           </Container>
           {/* <Container flex={0} gap={0} justify="center"> */}
           {/*  <Link href="/admin"> */}

@@ -123,7 +123,7 @@ const Login = (): JSX.Element => {
             thickness="large"
             onClick={logger()}
           >
-            Login
+            Se connecter
           </Button>
           <Button
             size="long"
@@ -131,7 +131,7 @@ const Login = (): JSX.Element => {
             thickness="large"
             onClick={goRegister()}
           >
-            Register
+            S&apos;inscrire
           </Button>
         </Container>
         <Container flex={4}>{}</Container>
