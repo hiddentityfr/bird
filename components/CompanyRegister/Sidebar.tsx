@@ -85,7 +85,7 @@ const Sidebar = ({ step }: { step: number }): JSX.Element => {
         thickness="large"
         onClick={goLogin()}
       >
-        Login
+        Se connecter
       </Button>
     </Container>
   );

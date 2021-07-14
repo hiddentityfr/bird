@@ -220,7 +220,7 @@ const CompanyForm = (): JSX.Element => {
                 <Text variant="h5">Votre entreprise a bien été crée.</Text>
                 <Link href="/login">
                   <Button size="short" variant="teal" thickness="large">
-                    Login
+                    Se connecter
                   </Button>
                 </Link>
               </Container>
